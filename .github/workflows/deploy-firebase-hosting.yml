@@ -1,0 +1,41 @@
+name: Deploy GlowNuture static preview to Firebase Hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-hosting-live
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: firebase-hosting-live
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run infrastructure tests
+        run: python -m unittest discover -s tests -p 'test_infrastructure.py' -v
+      - name: Build static preview
+        run: python scripts/build_firebase_preview.py
+      - name: Validate preview
+        run: python scripts/doctor.py --mode firebase-preview
+      - name: Prepare isolated hosting-only Firebase config
+        run: python scripts/prepare_firebase_action.py
+      - name: Deploy hosting ONLY
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GLOWNUTURE_F157C }}
+          projectId: glownuture-f157c
+          channelId: live
+          entryPoint: build/firebase-action
