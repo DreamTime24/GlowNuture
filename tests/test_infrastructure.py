@@ -33,9 +33,11 @@ class InfrastructureTests(unittest.TestCase):
                 self.assertTrue((ROOT / name).is_file(), name)
 
     def test_hosting_preview_never_points_to_source_or_repo(self):
-        data = json.loads((ROOT / "firebase.preview.json").read_text(encoding="utf-8"))
-        self.assertEqual(data["hosting"]["public"], "build/firebase-preview")
-        self.assertFalse(data["hosting"].get("rewrites"))
+        preview = json.loads((ROOT / "firebase.preview.json").read_text(encoding="utf-8"))
+        default = json.loads((ROOT / "firebase.json").read_text(encoding="utf-8"))
+        self.assertEqual(default["hosting"], preview["hosting"])
+        self.assertEqual(default["hosting"]["public"], "build/firebase-preview")
+        self.assertFalse(default["hosting"].get("rewrites"))
 
     def test_preview_builder_injects_banner_but_never_changes_source(self):
         original = (ROOT / "frontend/index.html").read_bytes()

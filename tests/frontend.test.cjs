@@ -66,6 +66,25 @@ test('empty server catalog does not display demo stock or restore persisted cred
   const s=await setup({products:[],legacy:{products:[{id:'p01',name:'Fake persisted item'}],user:{name:'Fake admin',role:'super_admin'},orders:[{customer:{phone:'private'}}]}});
   try{assert.equal(s.w.GNStore.store.products().length,0);assert.equal(s.w.GNStore.store.state.user,null);assert.equal(s.w.localStorage.getItem('gn_state_v2'),null);noErrors(s);}finally{s.close();}
 });
+test('homepage hero uses bundled illustrations only when the public catalog is empty',async()=>{
+  const empty=await setup({products:[]});
+  try{
+    const hero=empty.w.document.querySelector('.hero-visual .hv-inner');
+    const paths=Array.from(hero.querySelectorAll('img'),img=>new URL(img.src).pathname);
+    assert.equal(hero.classList.contains('hv-inner--illustrations'),true);
+    assert.deepEqual(paths,['/media/products/hero-cleanser.svg','/media/products/hero-serum.svg','/media/products/hero-sunscreen.svg']);
+    for(const image of hero.querySelectorAll('img')){assert.equal(image.alt,'');assert.ok(fs.existsSync(path.join('frontend',new URL(image.src).pathname.slice(1))));}
+    noErrors(empty);
+  }finally{empty.close();}
+  const populated=await setup();
+  try{
+    const hero=populated.w.document.querySelector('.hero-visual .hv-inner');
+    assert.equal(hero.classList.contains('hv-inner--illustrations'),false);
+    assert.match(hero.querySelector('img').src,/example\.com\/product\.png/);
+    assert.equal(hero.querySelectorAll('img').length,1);
+    noErrors(populated);
+  }finally{populated.close();}
+});
 test('catalog failure shows a retryable error, with no demo inventory',async()=>{
   const s=await setup({failCatalog:true,hash:'#/shop'});
   try{assert.match(s.w.document.getElementById('app').textContent,/Offline fixture catalog failure/);assert.ok(s.w.document.querySelector('[data-action=retry-catalog]'));assert.equal(s.w.GNStore.store.products().length,0);noErrors(s);}finally{s.close();}

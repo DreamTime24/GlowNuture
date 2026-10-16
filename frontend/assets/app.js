@@ -896,6 +896,11 @@ function viewHome(){
   const b = Store.state.banners.find(x => x.active) || Store.state.banners[0] || {};
 
   const heroProducts = all.slice(0, 3);
+  const heroIllustrations = [
+    '/media/products/hero-cleanser.svg',
+    '/media/products/hero-serum.svg',
+    '/media/products/hero-sunscreen.svg'
+  ];
 
   return `
   <section class="hero">
@@ -915,8 +920,10 @@ function viewHome(){
         </div>
       </div>
       <div class="hero-visual reveal">
-        <div class="hv-inner">
-          ${heroProducts.map(p => `<div>${artMini(p)}</div>`).join('')}
+        <div class="hv-inner${heroProducts.length ? '' : ' hv-inner--illustrations'}">
+          ${heroProducts.length
+            ? heroProducts.map(p => `<div>${artMini(p)}</div>`).join('')
+            : heroIllustrations.map(src => `<div><img src="${src}" alt="" width="800" height="800" decoding="async"></div>`).join('')}
         </div>
         <div class="hero-badge">
           <b>${esc(CATEGORIES[0].name)}</b>

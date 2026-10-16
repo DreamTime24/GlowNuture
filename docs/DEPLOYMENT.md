@@ -26,7 +26,7 @@ Run migrations once with a controlled maintenance/rollback plan before starting 
 | docker-compose.yml | Local PostgreSQL 17 + migration job + API + notification and catalog workers, persistent SQL/media; API bound only to loopback |
 | ops/nginx.conf | Owner-domain/TLS placeholders; proxies API/assets, forwards origin and keeps SSE unbuffered |
 | .github/workflows/verify-commerce.yml | Manual verification with isolated PostgreSQL, JS tests and migrations; no deployment |
-| firebase.json and firebase/* | Prepared deny-by-default rules; inspect existing rules before any authorised deployment |
+| firebase.json and firebase/* | Prepared deny-by-default rules and static preview Hosting target; inspect rules and build the preview before any authorised deployment |
 | scripts/backup_database.py | Explicit local backup; no offsite schedule or cloud provisioning |
 
 For local Compose, first generate backend/.env and supply a private POSTGRES_PASSWORD in your terminal/process environment. The Compose file refuses a blank password. Use a URL-safe generated password or encode the connection URL consistently. Then docker compose up --build. Docker build/Compose execution was not verified in this environment.

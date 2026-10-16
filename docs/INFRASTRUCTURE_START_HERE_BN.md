@@ -22,7 +22,7 @@ GlowNuture-Commerce/                     <-- এখান থেকেই সব
 │   └── media/
 ├── scripts/                              startup, backups, diagnostics, preview build
 ├── tests/                                stdlib-based infrastructure checks
-├── firebase.json                         existing rules; NOT public hosting config
+├── firebase.json                         existing rules + generated static preview Hosting target
 ├── firebase.preview.json                 isolated preview hosting only
 ├── docker-compose.yml                    local PostgreSQL + API + workers
 ├── .github/workflows/verify-commerce.yml test/verify; NOT auto-deploy
@@ -42,6 +42,14 @@ GlowNuture-Commerce/                     <-- এখান থেকেই সব
 7. কোনো error হলে CMD-এর **শেষ 30–50 লাইন** পাঠান, কিন্তু `.env` বা গোপন API key/DB password পাঠাবেন না।
 
 **ভুল করবেন না:** `backend/.env`, `*.db`, SQLite, backup এবং service-account key GitHub-এ upload করা যাবে না। পুরোনো encryption keys হারিয়ে গেলে existing customer data decrypt করা যাবে না। `scripts/setup_local.py` পুরোনো `.env` overwrite করে না।
+
+### পণ্যের ছবি বা ছবির লিংক যোগ করা
+
+1. Admin → Products-এ পণ্যটি draft হিসেবে save করুন, তারপর **Review / images** খুলুন।
+2. নিজের বা ব্যবহারের অনুমতি পাওয়া JPEG/PNG/WebP ছবি **Upload your own / authorized photograph** দিয়ে যোগ করুন। Owner/admin চাইলে **Import a permitted image URL**-এ সরাসরি public HTTPS ছবির লিংক দিতে পারেন। ছবি সর্বোচ্চ 5 MB।
+3. দুই ক্ষেত্রেই ছবির স্বত্বাধিকারী, লাইসেন্স/লিখিত অনুমতি, উৎসের প্রমাণ এবং সঠিক পণ্য/variant-এর মিল নিশ্চিত করুন। Gallery-তে main ছবি বেছে **Check stored images** চালান। নতুন ছবি review শেষ না হওয়া পর্যন্ত private থাকে।
+
+এই source-এ থাকা তিনটি SVG শুধু সাজসজ্জার illustration; এগুলো কোনো আসল পণ্যের ছবি নয়। বাস্তব পণ্যের ছবি ও অনুমতি owner-এর কাছ থেকে নিতে হবে। বিস্তারিত [পণ্য অনুমোদনের নির্দেশিকা](PRODUCT_APPROVAL_PLAYBOOK.md) দেখুন।
 
 ## 2. Firebase Hosting — ONLY একটি Preview
 
@@ -73,26 +81,19 @@ Preview link পাওয়া মানে live e-commerce deploy হয়েছে
 
 ## 3. GitHub repository সুরক্ষিতভাবে আপডেট
 
-তোমার existing repo `DreamTime24/GlowNuture`-এ ইতিমধ্যে কিছু static HTML আছে। **কখনো `git push --force` বা `git reset --hard` দিয়ে পুরোনো project মুছবে না।**
-
-নতুন clean clone-এ আলাদা branch তৈরি করে নতুন source পর্যালোচনা করো:
+এই `GlowNuture-Commerce` directory-তেই existing Git repository আছে; `origin` হলো `https://github.com/DreamTime24/GlowNuture.git`। নতুন project বা clone বানানোর প্রয়োজন নেই। পরিবর্তন পর্যালোচনা করে শুধু প্রয়োজনীয় source ফাইল stage করুন; local Firebase welcome page, `.agents/`, `.env`, `.venv`, `build/`, DB, credentials ও backups যোগ করবেন না।
 
 ```powershell
-git clone https://github.com/DreamTime24/GlowNuture.git GlowNuture-GitHub
-cd GlowNuture-GitHub
-git switch -c infrastructure-upgrade
-```
-
-এরপর নতুন ZIP-এর `GlowNuture-Commerce` directory-এর **প্রয়োজনীয় tracked files** এই clone-এ copy/merge করে পুরোনো code-এর সঙ্গে diff দেখে নাও। `.env`, `.venv`, `build/`, DB, credentials, backups copy করবে না। `git status`, `git diff --stat`, `git diff --check` ব্যবহার করে commit ও branch push করো:
-
-```powershell
-git add .
+git status --short
+git diff --stat
+git diff --check
+git add --update
 git diff --cached --check
-git commit -m "Prepare GlowNuture full-stack infrastructure"
-git push -u origin infrastructure-upgrade
+git commit -m "Update GlowNuture storefront"
+git push origin main
 ```
 
-GitHub-এ Pull Request খুলে যাচাই/merge করতে পারবে। CI automatic tests চালাবে; **production auto-deploy সেট করা হয়নি**, কারণ server, database, domain, billing ও approval এখনো নিশ্চিত নয়।
+**`git push --force` বা `git reset --hard` ব্যবহার করবেন না।** Branch protection থাকলে existing repository-তে review branch ও Pull Request ব্যবহার করুন। CI automatic tests চালাবে; **production auto-deploy সেট করা হয়নি**, কারণ server, database, domain, billing ও approval এখনো নিশ্চিত নয়।
 
 ## 4. Production Full-Stack Architecture
 

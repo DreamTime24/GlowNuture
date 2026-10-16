@@ -5,7 +5,7 @@ Scope: safe infrastructure and setup improvements to the provided `GlowNuture-Co
 ## Confirmed observations in uploaded archive
 
 - 157 ZIP entries (one project folder). `frontend/index.html` and `backend/app/main.py` implement a dynamic full-stack app. Separate API, relational DB, catalog/notification workers and Alembic migrations exist.
-- `firebase.json` includes Firebase database/storage rules but has no Hosting target. The user's earlier CLI was being run from a *parent* directory, and its `public` setup does not represent this full-stack app.
+- `firebase.json` includes Firebase database/storage rules but had no Hosting target in the original archive. The user's earlier CLI was being run from a *parent* directory, and its `public` setup does not represent this full-stack app.
 - Existing GitHub workflow was **manual only**, so push/PR did not continuously validate changes.
 - No existing `backend/.env` included; this is correct for safety, but first-run setup and readiness need to be explicit.
 
@@ -17,6 +17,7 @@ Scope: safe infrastructure and setup improvements to the provided `GlowNuture-Co
 4. Enabled GitHub checks on push to `main`, PR and manual invocation (but **no deployment**). CI verifies Python infra tests, static preview build/guard, frontend checks, backend pytest and DB migrations.
 5. Extended `.gitignore` for generated preview, Firebase local state and exported archives.
 6. Added `tests/test_infrastructure.py` and a Bangla `INFRASTRUCTURE_START_HERE_BN.md` walkthrough. Kept the production service templates, migrations and existing pages intact.
+7. A later local Firebase initialization pointed default Hosting at the stock `public/` welcome page. Aligned `firebase.json` with the generated, visibly marked static preview. A default Hosting deployment now needs a preview build; it cannot publish the stock welcome page. This remains a preview, never a working store.
 
 ## What this does *not* verify
 

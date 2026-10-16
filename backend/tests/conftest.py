@@ -20,6 +20,11 @@ from app.core.auth import _attempts
 from app.services import firebase as FB
 from app.api.platform import _catalog_cache
 REAL_VERIFY_TOKEN=FB.verify_token
+@pytest.fixture(scope="session",autouse=True)
+def close_test_resources():
+    yield
+    engine.dispose()
+    temp.cleanup()
 @pytest.fixture(autouse=True)
 def isolated(monkeypatch):
     Base.metadata.drop_all(engine);Base.metadata.create_all(engine);_attempts.clear();_catalog_cache.clear()

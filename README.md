@@ -9,7 +9,7 @@ Existing FastAPI + SQLAlchemy + Firebase + vanilla JavaScript beauty storefront,
 
 ## Run locally
 
-On Windows, `CHECK_SETUP.bat` shows read-only diagnostics and `run-local.bat` prepares the local environment. `BUILD_PREVIEW.bat` prepares only a visually marked static Firebase demo; it does not serve `/api`, payments, stock, login or checkout. Infrastructure change/limitations: [docs/INFRASTRUCTURE_CHANGELOG.md](docs/INFRASTRUCTURE_CHANGELOG.md).
+On Windows, `CHECK_SETUP.bat` shows read-only diagnostics and `run-local.bat` prepares the local environment. `BUILD_PREVIEW.bat` prepares only a visually marked static Firebase demo; it does not serve `/api`, payments, stock, login or checkout. Both Firebase Hosting configurations point to the generated `build/firebase-preview` directory, so build and check it before any preview-channel deployment. Infrastructure change/limitations: [docs/INFRASTRUCTURE_CHANGELOG.md](docs/INFRASTRUCTURE_CHANGELOG.md).
 
 
 Python 3.12 is required. On Windows, run run-local.bat. On other supported systems:
