@@ -1,0 +1,27 @@
+{
+  "source_file": "deepseek_html_20261002_8cb38a.html",
+  "source_size_bytes": 309597,
+  "generated": "2026-10-02",
+  "frontend_routes_preserved": true,
+  "backend": "FastAPI + SQLAlchemy",
+  "security": [
+    "Argon2id",
+    "server-side opaque sessions",
+    "CSRF",
+    "Fernet PII encryption",
+    "HMAC phone lookup",
+    "rate limiting",
+    "audit log"
+  ],
+  "motion": [
+    "scroll progress",
+    "reveal",
+    "3D card tilt",
+    "hero parallax",
+    "pointer glow",
+    "ripple",
+    "hover shine",
+    "lazy loading",
+    "reduced motion"
+  ]
+}

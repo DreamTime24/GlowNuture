@@ -1,0 +1,27 @@
+# Template only. Install after the owner approves the server and exact paths.
+[Unit]
+Description=GlowNuture catalog worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=glownuture
+Group=glownuture
+WorkingDirectory=/srv/glownuture/current/backend
+EnvironmentFile=/etc/glownuture/store.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/glownuture/current/.venv/bin/python -m app.catalog_worker
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=40
+KillSignal=SIGTERM
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/glownuture/shared/media
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

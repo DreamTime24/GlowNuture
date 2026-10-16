@@ -1,0 +1,37 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+*.db
+*.sqlite*
+.pytest_cache/
+node_modules/
+*.log
+dist/
+service-account*.json
+*serviceAccountKey*.json
+credentials*.json
+
+# Runtime media, private backups and credential material
+/frontend/media/assets/
+/private-backups/
+/backups/
+*.dump
+*.tar.gz
+*.pem
+*.key
+*.p12
+
+# Generated static-only Firebase preview (never deploy as a live store)
+/build/
+/.firebase/
+/firebase-debug.log
+/firebase-debug.*.log
+/.firebaserc
+
+# Local generated artifacts and sensitive exports
+*.zip
+*.bak
+*.tmp

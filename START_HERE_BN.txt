@@ -1,0 +1,20 @@
+GlowNuture Commerce - INFRASTRUCTURE PREPARED
+==============================================
+
+Eta FULL STACK website. Sudhu public folder-e sob file copy korben na.
+
+Windows PC te:
+1) ZIP extract kore GlowNuture-Commerce folder khulun.
+2) Python 3.12 install korun (py launcher shoho).
+3) CHECK_SETUP.bat - prothom bar backend/.env missing warning normal.
+4) run-local.bat - local website + database migrations + workers start korbe.
+5) Browser: http://127.0.0.1:8000
+6) Firebase static preview chai hole BUILD_PREVIEW.bat chalaben.
+   Eta live store noy; product/order/login/checkout API kaj korbe na.
+7) GitHub-e old repository overwrite/force push korben na.
+8) Domain/DNS/payment settings QA chara change korben na.
+
+Full Bangla guide: docs/INFRASTRUCTURE_START_HERE_BN.md
+Changes/tests: docs/INFRASTRUCTURE_CHANGELOG.md
+Existing project source and backend/database migrations remain preserved.
+No live deployment done. No passwords or .env included in this ZIP.

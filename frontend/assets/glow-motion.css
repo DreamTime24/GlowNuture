@@ -1,0 +1,93 @@
+/* Glow Nuture motion system. Extends app.css and reuses its tokens; nothing here edits app.css. */
+body{background-color:var(--gn-bg,var(--ivory));transition:background-color .9s var(--ease)}            /* 20 section transition */
+body.gn-home .section-alt,body.gn-home .trust{background:transparent}
+.brand .bn{display:none}                                                                                  /* English-only logotype */
+.brand .en{font-size:1.32rem;letter-spacing:.04em;text-transform:none;font-weight:700;color:var(--charcoal)}
+.site-footer .f-brand .bn{display:none}.site-footer .f-brand .en{font-size:1.3rem;letter-spacing:.04em;text-transform:none;color:#fff;font-weight:700}
+.admin-side .brand .en{color:#fff}
+
+/* 1 fade up, 2 fade+scale, 3 stagger, 8 blur->sharp, 9 rotate in (individual transform props compose with tilt) */
+[data-fx]{transition:opacity .9s var(--ease) calc(var(--i,0)*90ms),translate .9s var(--ease) calc(var(--i,0)*90ms),scale .9s var(--ease) calc(var(--i,0)*90ms),rotate .9s var(--ease) calc(var(--i,0)*90ms),filter .9s var(--ease) calc(var(--i,0)*90ms)}
+[data-fx]:not(.in){opacity:0}
+[data-fx=up]:not(.in),[data-fx=stagger]:not(.in){translate:0 34px}
+[data-fx=scale]:not(.in){scale:.9}
+[data-fx=blur]:not(.in){filter:blur(14px);translate:0 14px}
+[data-fx=rot]:not(.in){rotate:-4deg;translate:0 26px;scale:.96}
+
+/* 7 text mask reveal */
+.gn-mask{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
+.gn-mask-in{display:block;translate:0 108%;transition:translate 1.05s var(--ease)}
+.gn-mask.in .gn-mask-in{translate:0 0}
+
+/* 12 image zoom */
+[data-zoom]{scale:1.22;transition:scale 1.9s var(--ease)}[data-zoom].in{scale:1}
+
+/* 10 3D tilt: pointer + scroll depth (specificity beats app.css hover transforms) */
+.gn-tilt.gn-tilt,.gn-tilt.gn-tilt:hover{transform:perspective(900px) rotateX(calc(var(--ty,0deg) + var(--depth,0deg))) rotateY(var(--tx,0deg)) translateY(var(--lift,0px));transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+
+/* 13 floating elements */
+.hero{position:relative}.hero>.wrap{position:relative;z-index:1}
+.gn-floats{position:absolute;inset:0;pointer-events:none;z-index:0}
+.gn-fl{position:absolute;left:var(--x);top:var(--y);width:var(--s);color:var(--c);opacity:.55;translate:calc(var(--mx,0)*var(--z)*1px) calc(var(--my,0)*var(--z)*1px);animation:gnDrift var(--t) ease-in-out var(--dl) infinite alternate}
+.gn-fl svg{display:block;width:100%;height:auto}
+@keyframes gnDrift{from{transform:translate3d(0,0,0) rotate(-8deg)}to{transform:translate3d(16px,-28px,0) rotate(14deg)}}
+
+/* 5/17/18 horizontal track with centre spotlight */
+.gn-hs{height:var(--hs-h,100vh)}
+.gn-hs-pin{position:sticky;top:var(--header-h,66px);height:calc(100vh - var(--header-h,66px));display:flex;align-items:center;overflow:hidden}
+.gn-hs-track.gn-hs-track{display:flex;gap:24px;width:max-content;padding:0 calc(50vw - 150px);will-change:transform}
+.gn-hs-track>*{flex:0 0 min(300px,72vw);scale:calc(.88 + var(--spot,0)*.16);opacity:calc(.4 + var(--spot,0)*.6);transition:opacity .2s linear}
+
+/* 19 sticky category nav */
+.gn-catnav{position:sticky;top:var(--header-h,66px);z-index:30;background:color-mix(in srgb,var(--ivory) 84%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.gn-catnav .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.gn-catnav button{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-full);padding:7px 15px;font:600 .84rem 'Inter',sans-serif;color:var(--muted);cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.gn-catnav button.on{background:var(--sage-deep);border-color:var(--sage-deep);color:#fff}
+[data-nav]{scroll-margin-top:calc(var(--header-h,66px) + 58px)}
+
+/* 6 pinned story + 15 progress reveal */
+.gn-story{height:calc(var(--n,3)*95vh)}
+.gn-story-pin{position:sticky;top:var(--header-h,66px);height:calc(100vh - var(--header-h,66px));display:flex;align-items:center;overflow:hidden}
+.gn-story-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,5vw,72px);align-items:center;width:100%}
+.gn-story-copy{display:grid}
+.gn-story-copy .lead{font-size:.95rem;color:var(--sage-deep);font-weight:600;margin-bottom:18px}
+.gn-step{grid-area:1/1;opacity:0;translate:0 26px;transition:opacity .6s var(--ease),translate .6s var(--ease);pointer-events:none}
+.gn-step.on{opacity:1;translate:0 0;pointer-events:auto}
+.gn-step h2{font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.08;margin-bottom:14px}
+.gn-step p{max-width:46ch;color:var(--muted);font-size:1.02rem;line-height:1.7}
+.gn-journey{margin-top:34px;position:relative;display:flex;justify-content:space-between;max-width:420px}
+.gn-journey::before,.gn-journey i{content:"";position:absolute;left:7px;right:7px;top:7px;height:2px;background:var(--line-strong)}
+.gn-journey i{right:auto;width:calc((100% - 14px)*var(--p,0));background:var(--sage);transition:width .15s linear}
+.gn-dot{position:relative;display:grid;gap:8px;justify-items:center;font-size:.8rem;color:var(--muted);font-weight:600}
+.gn-dot::before{content:"";width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--line-strong);transition:all .4s var(--ease)}
+.gn-dot.on{color:var(--sage-deep)}.gn-dot.on::before{background:var(--sage);border-color:var(--sage);box-shadow:0 0 0 6px rgba(111,132,104,.18)}
+.gn-story-art{position:relative;aspect-ratio:1/1.05;max-height:62vh;border-radius:var(--r-lg);background:radial-gradient(circle at 50% 38%,#fff,var(--sage-soft) 70%);display:grid;place-items:center;box-shadow:var(--sh)}
+.gn-art{grid-area:1/1;width:46%;opacity:0;scale:.86;rotate:-6deg;filter:blur(8px);transition:all .8s var(--ease)}
+.gn-art.on{opacity:1;scale:1;rotate:0deg;filter:none}
+
+/* 16 before / after */
+.gn-ritual .wrap{max-width:980px}.gn-ritual h2{margin-bottom:8px}.gn-ritual p.sub{color:var(--muted);margin-bottom:26px}
+.gn-ba{--pos:50%;position:relative;aspect-ratio:16/9;border-radius:var(--r-lg);overflow:hidden;touch-action:pan-y;cursor:ew-resize;box-shadow:var(--sh);user-select:none}
+.gn-ba-pane{position:absolute;inset:0;display:grid;place-items:center}
+.gn-ba-night{background:linear-gradient(135deg,#2f3b2c,#4e6149)}
+.gn-ba-day{background:linear-gradient(135deg,#fbf1dc,#f7e8ea);clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+.gn-ba-pane img{width:min(24%,190px);filter:drop-shadow(0 14px 20px rgba(0,0,0,.25))}
+.gn-ba-pane span{position:absolute;top:16px;font:700 .9rem 'Inter',sans-serif;padding:6px 14px;border-radius:var(--r-full);background:rgba(255,255,255,.85);color:var(--charcoal)}
+.gn-ba-day span{left:16px}.gn-ba-night span{right:16px}
+.gn-ba-handle{position:absolute;top:0;bottom:0;left:var(--pos);width:3px;background:#fff;translate:-50% 0}
+.gn-ba-handle::after{content:"\2194";position:absolute;top:50%;left:50%;translate:-50% -50%;width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:var(--sh);color:var(--sage-deep);font-size:1.1rem}
+.gn-ba-handle:focus-visible{outline:3px solid var(--sage);outline-offset:4px}
+
+/* 14 counters */
+.gn-stats .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:26px;text-align:center}
+.gn-stats b{display:block;font:700 clamp(2.2rem,5vw,3.4rem)/1 'Inter',sans-serif;color:var(--sage-deep);font-variant-numeric:tabular-nums}
+.gn-stats span{display:block;margin-top:8px;color:var(--muted);font-size:.92rem}
+.announce .gn-badge-live{margin-left:12px;background:rgba(255,255,255,.14);color:inherit}
+
+@media(max-width:820px){.gn-story-grid{grid-template-columns:1fr}.gn-story-art{order:-1;max-height:34vh}.gn-ba{aspect-ratio:4/3}}
+@media(prefers-reduced-motion:reduce){
+  [data-fx],[data-zoom],.gn-mask-in,.gn-art,.gn-step{transition:none;opacity:1;translate:none;scale:1;rotate:none;filter:none}
+  .gn-fl{animation:none}.gn-floats{display:none}
+  .gn-story{height:auto}.gn-story-pin{position:static;height:auto;padding:40px 0}.gn-story-grid{grid-template-columns:1fr}
+  .gn-step{position:static;margin-bottom:26px}.gn-story-art,.gn-journey{display:none}
+}

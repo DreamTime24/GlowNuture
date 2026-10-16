@@ -1,0 +1,33 @@
+/* Additive refinements: preserve the original ivory, rose, sage and charcoal identity. */
+.gc-studio{--gc-rose:#f4e8e4;--gc-ink:#292b27;color:var(--gc-ink)}
+.gc-intro{padding:clamp(20px,4vw,42px);border:1px solid var(--line);border-radius:24px;background:linear-gradient(125deg,var(--surface),var(--ivory) 65%,var(--gc-rose));margin-bottom:24px}
+.gc-eyebrow{display:block;font:600 .7rem/1.5 Inter,sans-serif;letter-spacing:.2em;color:var(--sage-deep);margin-bottom:12px}
+.gc-intro h2{font:500 clamp(1.5rem,3vw,2.5rem)/1.2 Georgia,'Noto Serif Bengali',serif;max-width:25ch;letter-spacing:-.025em}
+.gc-intro p{max-width:65ch;color:var(--muted);margin-top:14px;line-height:1.7}
+.gc-status{display:inline-flex;border:1px solid var(--line-strong);border-radius:24px;padding:5px 12px;font-size:.72rem;font-weight:650;background:var(--surface-2);white-space:nowrap}
+.gc-status[data-state=PUBLISHED],.gc-status[data-state=completed]{background:var(--sage-soft);color:var(--sage-deep)}
+.gc-status[data-state=NEEDS_REVIEW],.gc-status[data-state=queued]{background:#f6efda;color:#645029}
+.gc-status[data-state=REJECTED],.gc-status[data-state=failed]{background:#f8e8e7;color:#8c3030}
+.gc-sub{display:block;color:var(--muted);font-size:.75rem;margin-top:6px}
+.gc-review-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:20px}
+.gc-review-layout>div{min-width:0}.gc-studio .ga-card{margin-bottom:20px}.gc-studio .ga-form{margin-bottom:22px}
+.gc-studio .ga-form>button{margin-top:18px}.gc-studio details>summary{cursor:pointer;font-weight:650;padding:10px 0}
+.gc-studio details[open]>summary{margin-bottom:12px}.gc-studio .gn-grid-form textarea{min-height:110px}
+.gc-studio .gn-checkbox{align-items:start;line-height:1.6}.gc-studio .gn-checkbox input{flex-shrink:0;margin-top:5px}
+.gc-media{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin:18px 0}
+.gc-media img{width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:var(--ivory);border-radius:14px;border:1px solid var(--line)}
+.gc-media figcaption{font-size:.78rem;padding:10px 0;overflow-wrap:anywhere}
+.gc-json{max-height:320px;overflow:auto;white-space:pre-wrap;word-break:break-word;background:var(--ivory);font:400 .78rem/1.7 ui-monospace,monospace;padding:14px;border-radius:12px;margin-top:12px}
+.gc-json:empty{display:none}.gc-checks{padding-left:22px;font-size:.86rem;line-height:1.8;color:#825029}
+.gc-history{list-style:none;margin:0;padding:0}.gc-history li{padding:14px 0;border-bottom:1px solid var(--line);font-size:.85rem}
+.gc-history li small{display:block;color:var(--muted);margin:5px 0}.gc-history li p{overflow-wrap:anywhere}
+#gn-admin input,#gn-admin select,#gn-admin textarea{max-width:100%;font:inherit}
+#gn-admin a,#gn-admin button,#gn-admin input:not([type=checkbox]),#gn-admin select{min-height:44px}
+#gn-admin a:focus-visible,#gn-admin button:focus-visible,#gn-admin input:focus-visible,#gn-admin textarea:focus-visible,#gn-admin summary:focus-visible{outline:3px solid var(--sage-deep);outline-offset:3px}
+#gn-admin aside{overflow-y:auto}#gn-admin .ga-pill::before{animation:none}
+#gn-admin code{overflow-wrap:anywhere;font-size:.75rem}.gc-studio .ga-wrap{margin-bottom:20px}
+.pcard-media .gn-product-image{transition:transform .5s var(--ease)}@media(hover:hover){.pcard:hover .gn-product-image{transform:scale(1.035)}}
+.pd-main .gn-product-image{width:100%;height:100%;object-fit:contain}.pd-thumbs button[aria-pressed=true]{outline:2px solid var(--sage-deep);outline-offset:3px}
+@media(max-width:1050px){.gc-review-layout{grid-template-columns:1fr}.gc-review-side{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}}
+@media(max-width:640px){.gc-intro{padding:22px 18px;border-radius:18px}.gc-review-side{display:block}.gc-media{grid-template-columns:repeat(2,minmax(0,1fr))}#gn-admin aside{max-width:100vw;flex-wrap:nowrap}#gn-admin aside a{white-space:nowrap}.gc-studio .ga-table{min-width:580px}.gc-studio .ga-card{padding:16px}}
+@media(prefers-reduced-motion:reduce){.gc-studio *,.pcard-media .gn-product-image{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

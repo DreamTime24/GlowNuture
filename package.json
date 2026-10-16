@@ -1,0 +1,12 @@
+{
+  "name": "glow-nuture-commerce",
+  "version": "3.0.0",
+  "private": true,
+  "scripts": {
+    "test:frontend": "node --test tests/frontend.test.cjs",
+    "check:frontend": "node scripts/check_frontend.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
+}

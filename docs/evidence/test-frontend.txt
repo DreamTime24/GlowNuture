@@ -1,0 +1,36 @@
+
+> glow-nuture-commerce@3.0.0 test:frontend
+> node --test tests/frontend.test.cjs
+
+✔ standalone catalog safely accepts both provider data envelopes and image fallbacks (181.446804ms)
+✔ standalone catalog displays a provider error and recovers with retry (68.021823ms)
+✔ standalone catalog opened as a file explains the required server without calling the private provider (36.963298ms)
+✔ empty server catalog does not display demo stock or restore persisted credentials (282.576954ms)
+✔ catalog failure shows a retryable error, with no demo inventory (253.776196ms)
+✔ official social links and product images render (258.954535ms)
+✔ broken images fall back once without inline event handlers (247.667343ms)
+✔ untrusted upstream strings stay escaped in reference cards (244.079398ms)
+✔ cart limits, comparison and persistence use IDs and quantities only (417.560938ms)
+✔ Firebase email form preserves Nuri and disables unconfigured Facebook (253.266147ms)
+✔ guest checkout submits a server total, numeric IDs, consent and idempotency key (623.802794ms)
+✔ variant selection preserves its price and ID through the cart (243.58621ms)
+✔ customer admin access shows staff sign-in without a browser admin flag (246.677315ms)
+✔ auth scene listeners stop after navigating to account security (420.850418ms)
+✔ core routes remain usable without runtime exceptions (1925.840115ms)
+✔ responsive image candidates clear srcset and try an alternate before placeholder (239.505594ms)
+✔ approved local collection prices use BDT and safely escapes product metadata (245.135087ms)
+✔ standalone collection refuses to relabel a foreign price as BDT (36.387969ms)
+✔ admin edits drafts without a publish checkbox and opens a distinct review queue (244.877292ms)
+✔ approval inspector shows all owner conditions, private previews and posts the saved revision (406.098485ms)
+✔ free source setup never prechecks owner authorization or stores a key in the browser (239.504552ms)
+✔ inventory staff can submit a draft but never see owner verification controls (240.120303ms)
+✔ base product remains selectable when a separate variant has stock (332.537385ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8074.863113
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Glow Nuture | Skin, hair and daily care products in Bangladesh</title>
+<meta name="description" content="Skin, hair and daily personal-care products with clear ingredient information. Delivery across Bangladesh and cash on delivery." />
+<meta name="theme-color" content="#FAF7F2" />
+<meta property="og:type" content="website" /><meta property="og:site_name" content="Glow Nuture" />
+<meta property="og:title" content="Glow Nuture | Skin, hair and daily care products in Bangladesh" />
+<meta property="og:description" content="Clear ingredient information, delivery across Bangladesh and cash on delivery." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="manifest" href="/manifest.webmanifest">
+  <!-- Set to your API origin only when frontend and backend are hosted separately. -->
+  <meta name="gn-api-base" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/app.css">
+<link rel="stylesheet" href="./assets/glow-enhance.css">
+<link rel="stylesheet" href="./assets/glow-motion.css">
+<link rel="stylesheet" href="./assets/glow-auth.css"><link rel="stylesheet" href="./assets/commerce.css"><link rel="stylesheet" href="./assets/catalog-studio.css">
+</head>
+<body>
+
+<!-- ============ Announcement ============ -->
+<div class="announce" id="announce">
+  <div class="wrap">
+    <span>Delivery across Bangladesh <span class="dot">•</span> <span class="hide-sm">Free delivery over ৳2,500 <span class="dot">•</span></span> Cash on delivery</span>
+  </div>
+</div>
+
+<!-- ============ Header ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="header-main">
+    <button class="icon-btn menu-toggle" data-action="open-menu" aria-label="Open menu">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+
+    <a href="#/" class="brand" aria-label="Glow Nuture home">
+      <span class="bn">গ্লো ন্যাচার</span>
+      <span class="en">Glow Nuture</span>
+    </a>
+
+    <nav class="nav-desktop" id="navDesktop" aria-label="Main menu"></nav>
+
+    <div class="search-wrap" id="searchWrap">
+      <div class="search-box">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="searchInput" placeholder="Search products, brands or ingredients..." autocomplete="off" aria-label="Search products" />
+      </div>
+      <div id="suggestBox"></div>
+    </div>
+
+    <div class="header-actions">
+      <a href="#/account" class="icon-btn" aria-label="Account" title="My account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a href="#/wishlist" class="icon-btn" aria-label="Wishlist" title="Wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9z"/></svg>
+        <span class="badge" id="wishBadge" hidden>0</span>
+      </a>
+      <button class="icon-btn" data-action="open-cart" aria-label="Bag" title="Bag">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" id="cartBadge" hidden>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ App root ============ -->
+<main id="app" tabindex="-1"></main>
+
+<!-- ============ Footer ============ -->
+<footer class="site-footer" id="siteFooter"></footer>
+
+<!-- ============ Mobile bottom nav ============ -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation"></nav>
+
+<!-- ============ Overlays ============ -->
+<div class="scrim" id="scrim" data-action="close-overlays"></div>
+
+<aside class="drawer drawer-left" id="menuDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div class="brand"><span class="bn">গ্লো ন্যাচার</span><span class="en">Glow Nuture</span></div>
+    <button class="icon-btn" data-action="close-overlays" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <nav class="drawer-nav" id="drawerNav"></nav>
+  </div>
+  <div class="drawer-foot">
+    <a href="#/track" class="btn btn-outline btn-block" data-action="close-overlays">Track your order</a>
+  </div>
+</aside>
+
+<aside class="drawer drawer-right" id="cartDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    <h3>Your bag</h3>
+    <button class="icon-btn" data-action="close-overlays" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="cartDrawerBody"></div>
+  <div class="drawer-foot" id="cartDrawerFoot"></div>
+</aside>
+
+<div class="modal-scrim" id="modalScrim" data-action="close-modal">
+  <div class="modal" id="modalBox" role="dialog" aria-modal="true"></div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
+<script src="./assets/api-client.js" defer></script>
+<script src="./assets/app.js" defer></script>
+<script src="./assets/glow-motion.js" defer></script>
+<script src="./assets/glow-auth.js" defer></script>
+<script src="./assets/firebase-bridge.js" defer></script>
+<script src="./assets/commerce-ui.js" defer></script>
+<script src="./assets/catalog-console.js" defer></script>
+<script src="./assets/glow-admin.js" defer></script>
+</body>
+</html>

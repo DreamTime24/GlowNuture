@@ -1,0 +1,20 @@
+{
+  "hosting": {
+    "public": "build/firebase-preview",
+    "ignore": [
+      "firebase-debug.log",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [{"key": "Cache-Control", "value": "no-store"}]
+      },
+      {
+        "source": "**/*.webmanifest",
+        "headers": [{"key": "Cache-Control", "value": "no-store"}]
+      }
+    ]
+  }
+}
