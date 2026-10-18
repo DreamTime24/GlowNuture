@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Explore GlowNuture's curated beauty and skincare product collection in Bangladesh. Product information and photographs reviewed by our team.">
+  <meta name="theme-color" content="#faf7f2">
+  <title>Product Collection | GlowNuture Bangladesh</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./collection.css">
+  <script src="./collection.js" defer></script>
+</head>
+<body>
+  <div class="topline">GLOWNUTURE · BANGLADESH · BEAUTY WITH INTENTION</div>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="GlowNuture home">glow<span>nuture</span><i>✦</i></a>
+    <nav aria-label="Primary navigation">
+      <a href="/">Home</a>
+      <a href="#products">Collection</a>
+      <a href="https://www.facebook.com/glownuturebd" rel="noopener noreferrer" target="_blank">Contact us ↗</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyeline"></span> Carefully curated beauty</div>
+        <h1 id="hero-title">A little more <em>glow.</em><br>Every single day.</h1>
+        <p>স্কিনকেয়ার ও বিউটি প্রোডাক্টের সংগ্রহ—সঠিক পরিচিতি, ছবি ও পণ্যের তথ্যসহ। নিজের যত্নের জন্য উপযুক্ত পণ্যটি খুঁজে নিন।</p>
+        <a class="hero-cta" href="#products">Explore collection <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="halo one"></div><div class="halo two"></div><div class="art-label">THE BEAUTY<br>OF EVERYDAY<br>RITUALS</div><div class="art-flower">✺</div></div>
+    </section>
+    <section class="collection" id="products" aria-labelledby="collection-title">
+      <div class="section-heading"><div><div class="eyebrow">THE COLLECTION</div><h2 id="collection-title">Discover your essentials</h2><p>Only reviewed product information is included here. Ask us for current price and availability.</p></div><div class="count" id="count" aria-live="polite"></div></div>
+      <div class="toolbar">
+        <label class="search-wrap"><span class="visually-hidden">Search products</span><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search by name, brand or ingredient…" autocomplete="off"></label>
+        <label class="select-wrap"><span class="visually-hidden">Brand</span><select id="brand"><option value="">All brands</option></select></label>
+        <label class="select-wrap"><span class="visually-hidden">Sort products</span><select id="sort"><option value="name">Name A–Z</option><option value="brand">Brand A–Z</option></select></label>
+      </div>
+      <div id="categories" class="categories" aria-label="Filter by category"></div>
+      <div class="notice" id="status" role="status" aria-live="polite">Loading collection…</div>
+      <div class="product-grid" id="grid" aria-live="polite"></div>
+      <div class="pagination"><button id="prev" disabled>← Previous</button><span id="page" aria-live="polite"></span><button id="next" disabled>Next →</button></div>
+    </section>
+    <section class="story"><div class="eyebrow">WHY GLOWNUTURE</div><h2>Beauty begins with knowing<br><em>what you're choosing.</em></h2><p>আমরা প্রোডাক্টের তথ্য স্পষ্টভাবে তুলে ধরতে চাই। প্রতিটি পণ্যের উপাদান, ব্যবহারের নিয়ম ও উপযোগিতা কেনার আগে নিজে যাচাই করুন।</p><a href="https://www.facebook.com/glownuturebd" rel="noopener noreferrer" target="_blank">Talk to our team ↗</a></section>
+  </main>
+  <dialog id="details" aria-labelledby="dialog-title"><button class="close" id="close" aria-label="Close product details">×</button><div id="details-body"></div></dialog>
+  <footer><a class="wordmark" href="/">glow<span>nuture</span><i>✦</i></a><p>Curated skincare & beauty · Bangladesh</p><div><a href="https://www.facebook.com/glownuturebd" target="_blank" rel="noopener noreferrer">Facebook</a><a href="https://www.instagram.com/glownuture/reels/" target="_blank" rel="noopener noreferrer">Instagram</a></div><small>Product discovery only. Online ordering, stock and checkout are not provided on this collection page. Images are displayed only when owner-approved.</small></footer>
+</body>
+</html>
