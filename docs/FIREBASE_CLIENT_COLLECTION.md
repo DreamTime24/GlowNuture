@@ -23,6 +23,16 @@ Columns:
 
 **All three approval fields must be \`yes\` for a row to appear.** Any missing/invalid image blocks publication of that row. Nothing automatically appears in the checkout inventory. No purchased stock, image rights, fake prices or claims are inferred from the source feed. The 500-item Open Beauty Facts export can be a starting *reference*, but its empty BDT/stock cells and unverified images are not release approval.
 
+## Convert your existing CSV to a review sheet (optional)
+
+Use the earlier GlowNuture 500-product CSV or \`ogerio_products.csv\`. This command maps product names, brands, descriptions and exact-name **candidate** images to an unapproved review CSV:
+
+\`\`\`powershell
+py -3.12 scripts/prepare_client_catalog_from_csv.py --csv "C:\path\to\your_products.csv" --images "client_catalog\images" --output "client_catalog\review_candidates.csv"
+\`\`\`
+
+All approval flags default to \`no\` and the owner selling price stays blank. Review the file, verify image rights and exact product variants, then copy only approved records into \`client_catalog/approved_products.csv\`. This command never overwrites existing reviewed CSV files.
+
 ## 2. Add matching real photos
 
 Extract your image ZIP/RAR **on your PC** and copy the photos to \`client_catalog/images/\`. Edit \`local_image\` for the real match, check licensing, then approve each row. The image matching manifest generator is also available:
@@ -40,7 +50,7 @@ At the repository root on Windows, install Python 3.12 and run:
 \`\`\`powershell
 py -3.12 scripts/build_firebase_preview.py
 py -3.12 scripts/doctor.py --mode firebase-preview
-py -3.12 -m unittest discover -s tests -p "test_client_collection.py" -v
+py -3.12 -m unittest discover -s tests -p "test_client*.py" -v
 \`\`\`
 
 The static files will be in \`build/firebase-preview/\`, with the collection at \`build/firebase-preview/collection/index.html\` and products in \`collection/catalog.json\`. You must serve these via HTTP, not double-click the HTML file.
