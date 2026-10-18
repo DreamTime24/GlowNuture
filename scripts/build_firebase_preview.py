@@ -61,8 +61,13 @@ def build(destination: Path = DESTINATION) -> Path:
     collection_target.mkdir(parents=True, exist_ok=True)
     for name in ("index.html", "collection.css", "collection.js"):
         shutil.copy2(collection_source / name, collection_target / name)
-    from build_client_collection import build_collection
-    build_client_collection_result = build_collection(destination)
+    # Import by explicit path: works both as a CLI script and in isolated tests.
+    from importlib.util import module_from_spec, spec_from_file_location
+    spec = spec_from_file_location("client_collection_builder", ROOT / "scripts" / "build_client_collection.py")
+    module = module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+    module.build_collection(destination)
     # Mark every static preview page accurately; the read-only collection gets its own notice.
 
     for index in destination.rglob("*.html"):
