@@ -25,6 +25,8 @@ jobs:
           python-version: '3.12'
       - name: Run infrastructure tests
         run: python -m unittest discover -s tests -p 'test_infrastructure.py' -v
+      - name: Test client collection safety
+        run: python -m unittest discover -s tests -p "test_client*.py" -v
       - name: Build static preview
         run: python scripts/build_firebase_preview.py
       - name: Validate preview
