@@ -182,12 +182,23 @@ def test_partial_refunds_reconcile_every_paisa_without_exceeding_revenue(client,
 
 def test_standalone_catalog_has_only_hash_authorized_inline_script(client):
     import re,base64,hashlib
+    from urllib.parse import urljoin,urlsplit
     response=client.get("/ordinary-catalog")
     assert response.status_code==200
     script=re.findall(r"<script>(.*?)</script>",response.text,flags=re.S)
     assert len(script)==1
     digest=base64.b64encode(hashlib.sha256(script[0].encode()).digest()).decode()
-    assert "'sha256-"+digest+"'" in response.headers["content-security-policy"]
+    script_policy=response.headers["content-security-policy"].split("script-src ",1)[1].split(";",1)[0]
+    assert set(script_policy.split())=={"'self'","'sha256-"+digest+"'"}
+    assert "'unsafe-inline'" not in script_policy
+    external_paths={urlsplit(urljoin(str(response.url),source)).path for source in re.findall(r'<script\b[^>]*\bsrc="([^"]+)"',response.text)}
+    for filename,global_name in [("media-paths.js","GNMediaURL"),("local-catalog.js","GNLocalCatalog")]:
+        asset_path="/assets/"+filename
+        assert asset_path in external_paths
+        asset=client.get(asset_path)
+        assert asset.status_code==200
+        assert asset.headers["content-type"].split(";",1)[0] in {"text/javascript","application/javascript"}
+        assert global_name in asset.text
     assert "offline-fixture-key" not in response.text and "X-API-Key" not in response.text
 def test_purchase_receive_batch_expiry_and_restock(make_client,product,customer,db):
     client=make_client("super_admin");product.stock=0;db.commit()

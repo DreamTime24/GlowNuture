@@ -9,6 +9,14 @@ const headerH = () => parseFloat(getComputedStyle(document.documentElement).getP
 const fmt = n => Number(n).toLocaleString("en-US");
 const TONES = { ivory: "var(--ivory)", white: "var(--surface)", sage: "var(--sage-soft)" };
 const TILT = ".pcard,.cat-card,.jcard,.hero-visual";
+const mediaURL = value => window.GNMediaURL ? window.GNMediaURL(value) : value;
+
+function setRoutinePosition(panel, value) {
+  const position = clamp(value, 0, 100), handle = $(".gn-ba-handle", panel);
+  panel.style.setProperty("--pos", position + "%");
+  handle?.setAttribute("aria-valuenow", Math.round(position));
+  handle?.setAttribute("aria-valuetext", Math.round(position) + "% morning, " + (100 - Math.round(position)) + "% night");
+}
 
 /* ---------- Real-time client (Server-Sent Events) ---------- */
 window.GNRealtime = {
@@ -91,7 +99,7 @@ function frame() {
   });
 
   const ba = $(".gn-ba");                                         // 16 slider sweeps with scroll until the visitor takes over
-  if (ba && !ba.dataset.user) { const r = $(".gn-ritual").getBoundingClientRect(); ba.style.setProperty("--pos", (18 + 64 * clamp((vh - r.top) / (vh + r.height))).toFixed(1) + "%"); }
+  if (ba && !ba.dataset.user) { const r = $(".gn-ritual").getBoundingClientRect(); setRoutinePosition(ba, 18 + 64 * clamp((vh - r.top) / (vh + r.height))); }
 }
 addEventListener("scroll", schedule, { passive: true });
 addEventListener("resize", schedule);
@@ -116,9 +124,9 @@ const navIO = new IntersectionObserver(es => es.forEach(e => {    // 19 active c
 
 /* ---------- Builders (home only, idempotent) ---------- */
 const STEPS = [
-  ["Cleanse", "Start with a clean slate", "Wash off the day without stripping your skin. Lukewarm water, one gentle minute, no scrubbing.", "./media/products/hero-cleanser.svg"],
-  ["Treat", "Give it one job to focus on", "Pick a single serum for your biggest concern and stay with it for a few weeks before you judge it.", "./media/products/hero-serum.svg"],
-  ["Protect", "Finish with sunscreen, every morning", "If you only keep one step, keep this one. A line the length of two fingers covers face and neck.", "./media/products/hero-sunscreen.svg"]
+  ["Cleanse", "Start with a clean slate", "Wash off the day without stripping your skin. Lukewarm water, one gentle minute, no scrubbing.", "/assets/image/cosrx-low-ph-good-morning-gel-cleanser.jpg", "COSRX Low pH Good Morning Gel Cleanser", 736, 883],
+  ["Treat", "Give it one job to focus on", "Pick a single serum for your biggest concern and stay with it for a few weeks before you judge it.", "/assets/image/the-ordinary-niacinamide-10-plus-zinc-1.jpg", "The Ordinary Niacinamide 10% + Zinc 1%", 736, 736],
+  ["Protect", "Finish with sunscreen, every morning", "If you only keep one step, keep this one. A line the length of two fingers covers face and neck.", "/assets/image/beauty-of-joseon-relief-sun-spf50-plus-rice-plus-probiotics-sunscreen.jpg", "Beauty of Joseon Relief Sun sunscreen", 736, 1308]
 ];
 const SHAPES = [
   '<svg viewBox="0 0 32 32"><path d="M4 28C4 14 14 4 28 4c0 14-10 24-24 24z" fill="currentColor"/><path d="M6 26 22 10" stroke="#fff" stroke-opacity=".55" stroke-width="1.4" fill="none"/></svg>',
@@ -140,7 +148,7 @@ function buildStory(after) {                                      // 6 + 15
     <div class="gn-story-copy"><p class="lead">Your skin care journey, one step at a time</p>
       ${STEPS.map((x, i) => `<article class="gn-step" data-i="${i}"><h2>${x[1]}</h2><p>${x[2]}</p></article>`).join("")}
       <div class="gn-journey"><i></i>${STEPS.map((x, i) => `<span class="gn-dot" data-i="${i}">${x[0]}</span>`).join("")}</div></div>
-    <div class="gn-story-art">${STEPS.map((x, i) => `<img class="gn-art" data-i="${i}" src="${x[3]}" alt="${x[0]} step product" loading="lazy">`).join("")}</div>
+    <div class="gn-story-art">${STEPS.map((x, i) => `<img class="gn-art" data-i="${i}" src="${mediaURL(x[3])}" alt="${x[4]}" width="${x[5]}" height="${x[6]}" loading="lazy" decoding="async">`).join("")}</div>
   </div></div>`);
   s.id = "gn-story"; s.dataset.n = STEPS.length; s.dataset.tone = "sage"; s.dataset.nav = "Journey"; s.style.setProperty("--n", STEPS.length);
   after.after(s); floaters($(".gn-story-art", s));
@@ -152,17 +160,24 @@ function buildRitual(anchor) {                                    // 16
   if ($(".gn-ritual")) return;
   const s = el("section", "section gn-ritual", `<div class="wrap"><h2>Two routines, one shelf</h2>
     <p class="sub">Drag the handle to compare. Mornings are about protection, nights are about repair.</p>
-    <div class="gn-ba"><div class="gn-ba-pane gn-ba-night"><img src="./media/products/hero-serum.svg" alt="Night serum" loading="lazy"><span>Night</span></div>
-    <div class="gn-ba-pane gn-ba-day"><img src="./media/products/hero-sunscreen.svg" alt="Morning sunscreen" loading="lazy"><span>Morning</span></div>
+    <div class="gn-ba"><div class="gn-ba-pane gn-ba-night"><img src="${mediaURL('/assets/image/glownuture_night.webp')}" alt="Night skincare routine with cleanser, toner, serum, night cream and eye cream" width="1200" height="1200" loading="lazy" decoding="async" draggable="false"><span>Night</span></div>
+    <div class="gn-ba-pane gn-ba-day"><img src="${mediaURL('/assets/image/glownuture_morning.webp')}" alt="Morning skincare routine with cleanser, toner, serum, moisturizer and sunscreen" width="1200" height="1200" loading="lazy" decoding="async" draggable="false"><span>Morning</span></div>
     <div class="gn-ba-handle" role="slider" tabindex="0" aria-label="Compare morning and night routine" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></div></div></div>`);
   s.dataset.tone = "white"; s.dataset.nav = "Routines"; anchor.after(s);
   const ba = $(".gn-ba", s), h = $(".gn-ba-handle", s); let drag = false;
-  const set = p => { p = clamp(p, 0, 100); ba.style.setProperty("--pos", p + "%"); h.setAttribute("aria-valuenow", Math.round(p)); };
+  const set = p => setRoutinePosition(ba, p);
   const at = x => { const r = ba.getBoundingClientRect(); set((x - r.left) / r.width * 100); };
-  ba.addEventListener("pointerdown", e => { drag = true; ba.dataset.user = 1; ba.setPointerCapture(e.pointerId); at(e.clientX); });
+  ba.addEventListener("pointerdown", e => { drag = true; ba.dataset.user = 1; ba.setPointerCapture?.(e.pointerId); at(e.clientX); });
   ba.addEventListener("pointermove", e => drag && at(e.clientX));
   ["pointerup", "pointercancel"].forEach(t => ba.addEventListener(t, () => drag = false));
-  h.addEventListener("keydown", e => { const d = { ArrowLeft: -5, ArrowRight: 5 }[e.key]; if (d) { e.preventDefault(); ba.dataset.user = 1; set(parseFloat(getComputedStyle(ba).getPropertyValue("--pos")) + d); } });
+  h.addEventListener("keydown", e => {
+    const delta = { ArrowLeft: -5, ArrowRight: 5 }[e.key];
+    if (!delta && e.key !== "Home" && e.key !== "End") return;
+    e.preventDefault(); ba.dataset.user = 1;
+    const current = parseFloat(getComputedStyle(ba).getPropertyValue("--pos"));
+    set(e.key === "Home" ? 0 : e.key === "End" ? 100 : (Number.isFinite(current) ? current : 50) + delta);
+  });
+  set(50);
 }
 
 let viewers = null;
@@ -180,7 +195,7 @@ function buildStats(anchor) {                                     // 14, numbers
 
 function buildCatNav() {                                          // 19
   if ($(".gn-catnav")) return;
-  const names = ["Bestsellers", "New arrivals", "Skincare", "Everyday care"];
+  const names = ["Collection", "New arrivals", "Skincare", "Everyday care"];
   let k = 0;
   $$("#app .section").forEach(sec => {
     if (sec.dataset.nav) return;
@@ -205,7 +220,7 @@ function tag(sel, fx) {
 }
 function tagAll() {
   $$("#app .section").forEach(sec => {
-    if (sec.dataset.fx || sec.id === "gn-story" || $(".gn-hs", sec) || sec.classList.contains("gn-ritual") || sec.classList.contains("gn-stats")) return;
+    if (sec.dataset.fx || sec.id === "gn-story" || $(".gn-hs,.pcard-local", sec) || sec.classList.contains("gn-ritual") || sec.classList.contains("gn-stats")) return;
     sec.dataset.fx = sec.classList.contains("section-alt") ? "blur" : "up";
   });
   tag("#app .co-card,#app .newsletter,#app .trust-item,#app .stat-card", "scale");
@@ -221,7 +236,7 @@ function tagAll() {
 }
 function buildTrack() {                                           // 5 / 17 / 18
   if (reduce) return;
-  const g = $("#app .prod-grid");
+  const g = $("#app .prod-grid:not([data-local-collection])");
   if (!g || g.dataset.hs || g.children.length < 4 || !$("#app .hero")) return;
   g.dataset.hs = 1;
   const box = el("div", "gn-hs"), pin = el("div", "gn-hs-pin");

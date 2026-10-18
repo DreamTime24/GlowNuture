@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="The Ordinary owner-verified collection at Glow Nuture. Selling prices in BDT.">
+<meta name="description" content="Explore The Ordinary image collection at Glow Nuture.">
 <meta name="color-scheme" content="light">
 <title>The Ordinary · Glow Nuture</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%237e9b83'/%3E%3Ctext x='32' y='42' text-anchor='middle' fill='white' font-size='32'%3EG%3C/text%3E%3C/svg%3E">
@@ -15,90 +15,85 @@ a{color:inherit;text-underline-offset:4px}button{font:inherit;cursor:pointer;bor
 header{display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid var(--line)}.brand{font-family:Georgia,serif;font-size:1.45rem;text-decoration:none}.brand em{color:var(--sage);font-style:normal}
 h1{font-family:Georgia,serif;font-size:clamp(2.1rem,6vw,3.7rem);font-weight:400;line-height:1.1;margin:26px 0 12px}.intro{max-width:680px;color:var(--muted)}.eyebrow{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:22px;margin:28px 0}.card{display:flex;flex-direction:column;background:white;border:1px solid var(--line);border-radius:18px;overflow:hidden;animation:appear .35s ease-out}
-.picture{height:260px;background:#f1f3ee;display:grid;place-items:center;padding:24px}.picture img{width:100%;height:100%;object-fit:contain;min-height:0}.details{padding:20px;display:flex;flex-direction:column;flex:1}.details h2{font-size:1.05rem;line-height:1.5;margin:8px 0}.price{font-weight:650;margin:0 0 12px}
+.picture{height:260px;background:#fff;display:grid;place-items:center;padding:24px}.picture img{width:100%;height:100%;object-fit:contain;object-position:center;min-height:0}.details{padding:20px;display:flex;flex-direction:column;flex:1}.details h2{font-size:1.05rem;line-height:1.5;margin:8px 0}.price{font-weight:650;margin:0 0 12px}
 .description{color:var(--muted);font-size:.88rem;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;margin:0 0 20px}.ingredients{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;font-size:.8rem;color:var(--muted)}.ingredients strong{display:block;color:var(--ink);font-weight:550}
 .state{padding:28px 0;text-align:center;color:var(--muted)}.spinner{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--sage);border-radius:50%;margin:0 auto 12px;animation:spin .8s linear infinite}.error{color:#8b342e;background:#fff0ed;border:1px solid #e5c5bc;border-radius:14px;padding:20px}.pager{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap;margin:28px 0}footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}[hidden]{display:none!important}
 @keyframes spin{to{transform:rotate(360deg)}}@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@media(max-width:540px){header,main,footer{padding:22px 16px}.grid{grid-template-columns:1fr;gap:18px}.picture{height:290px}header{align-items:flex-start;flex-direction:column}}@media(prefers-reduced-motion:reduce){.card{animation:none}.spinner{animation-duration:2s}}
 </style>
 </head>
 <body>
-<header><a class="brand" href="/">glow<span>nuture</span><em> ✧</em></a><a href="/#/shop">Visit the approved shop →</a></header>
+<header><a class="brand" href="/">glow<span>nuture</span><em> ✧</em></a><a href="/#/shop">Browse all images →</a></header>
 <main>
-<p class="eyebrow">Ingredients first · The verified collection</p>
+<p class="eyebrow">The collection</p>
 <h1>The Ordinary</h1>
-<p class="intro">Explore owner-verified formulas, ingredient information and actual selling prices in Bangladesh Taka (BDT).</p>
-<div id="state" class="state" role="status" aria-live="polite"><div class="spinner" aria-hidden="true"></div>Loading products…</div>
+<p class="intro">Explore The Ordinary collection.</p>
+<div id="state" class="state" role="status" aria-live="polite"></div>
 <section id="products" class="grid" aria-label="The Ordinary products" aria-busy="true"></section>
-<nav class="pager" aria-label="Catalog pages"><button id="prev" disabled>Previous</button><span id="page">Page 1</span><button id="next" disabled>Next</button><button id="retry" hidden>Retry</button></nav>
 </main>
 <footer>Glow Nuture · <a href="https://www.facebook.com/glownuturebd" rel="noopener noreferrer" target="_blank">Facebook</a> · <a href="https://www.instagram.com/glownuture/reels/" rel="noopener noreferrer" target="_blank">Instagram</a></footer>
+<script src="../assets/media-paths.js" defer></script>
+<script src="../assets/local-catalog.js" defer></script>
 <script>
 (function () {
   "use strict";
-  var offset = 0, busy = false, limit = 12;
   var grid = document.getElementById("products"), state = document.getElementById("state");
-  var previous = document.getElementById("prev"), next = document.getElementById("next"), retry = document.getElementById("retry");
-  var remotePlaceholder = "/assets/no-image.svg";
+  var mediaURL = function (value) { return window.GNMediaURL ? window.GNMediaURL(value) : value; };
+  var placeholder = "";
   var finalPlaceholder = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect width="300" height="300" fill="#edf1e9"/><text x="150" y="150" text-anchor="middle" fill="#697569" font-family="sans-serif" font-size="16">No Image</text></svg>');
   function string(value, fallback) {
     return typeof value === "string" || typeof value === "number" ? String(value).slice(0, 6000) : fallback || "";
   }
   function safeImage(value) {
-    var input = string(value).trim(); if (!input) return "";
-    try { var url = new URL(input, location.origin); return url.protocol === "https:" || url.origin === location.origin && url.protocol === "http:" ? url.href : ""; } catch (_) { return ""; }
-  }
-  function ingredients(product) {
-    var list = product?.key_ingredients ?? product?.ingredients;
-    if (Array.isArray(list)) return list.map(function (item) { return string(item?.name ?? item); }).filter(Boolean).join(", ") || "Not supplied";
-    return string(list, "Not supplied");
+    var input = string(value).trim(); if (!/^\/assets\/image\/[a-z0-9-]+\.jpg$/.test(input)) return "";
+    try {
+      var url = new URL(mediaURL(input), document.baseURI);
+      var imageBase = new URL(mediaURL("/assets/image/"), document.baseURI);
+      if(!url.href.startsWith(imageBase.href))return "";
+      if(location.protocol === "file:")return url.protocol === "file:" ? url.href : "";
+      return url.origin === location.origin && /^https?:$/.test(url.protocol) ? url.href : "";
+    } catch (_) { return ""; }
   }
   function element(tag, cls, value) {
     var node = document.createElement(tag); if (cls) node.className = cls; if (value !== undefined) node.textContent = value; return node;
   }
   function card(product) {
     var article = element("article", "card"), picture = element("div", "picture"), image = document.createElement("img");
-    var first = Array.isArray(product?.images) ? product.images[0] : product?.images;
-    image.src = safeImage(product?.image_url) || safeImage(first?.url ?? first?.src ?? first) || remotePlaceholder;
-    image.width = 300; image.height = 300;
-    var asset=product?.image_assets?.find(function(a){return new URL(a.url,location.origin).href===image.src;});
+    image.src = safeImage(product?.image_url) || placeholder;
+    var asset=product?.image_assets?.find(function(a){return safeImage(a.url)===image.src;});
+    image.width = Number(asset?.width) > 0 ? Number(asset.width) : 300;
+    image.height = Number(asset?.height) > 0 ? Number(asset.height) : 300;
     if(asset?.variants?.length){var sizes=new Map();asset.variants.forEach(function(v){if(safeImage(v.url)&&Number(v.width)>0)sizes.set(v.width,safeImage(v.url));});image.srcset=Array.from(sizes).map(function(pair){return pair[1]+" "+pair[0]+"w";}).join(", ");image.sizes="(max-width:540px) 90vw, (max-width:980px) 45vw, 300px";}
     image.alt = string(product?.name, "The Ordinary product"); image.loading = "lazy"; image.decoding = "async";
     var failed = false;
-    image.onerror = function () { image.removeAttribute("srcset"); if (!failed) { failed = true; image.src = remotePlaceholder; } else { image.onerror = null; image.src = finalPlaceholder; } };
+    image.onerror = function () {
+      image.removeAttribute("srcset");
+      image.removeAttribute("sizes");
+      if (!failed) { failed = true; image.src = placeholder; }
+      else { image.onerror = null; image.src = finalPlaceholder; }
+    };
     picture.append(image); article.append(picture);
     var details = element("div", "details");
-    details.append(element("span", "eyebrow", "The Ordinary"), element("h2", "", string(product?.name, "Untitled product")));
-    var price = product?.price !== null && product?.price !== undefined && (!product?.currency || product.currency==="BDT") && Number.isFinite(Number(product?.price)) ? "৳" + Number(product.price).toLocaleString("en-BD",{maximumFractionDigits:2}) : "Price unavailable", currency = "BDT";
-    details.append(element("p", "price", price + (currency ? " " + currency : "")), element("p", "description", string(product?.description, "No description supplied.")));
-    var keys = element("div", "ingredients"); keys.append(element("strong", "", "Key ingredients"), element("span", "", ingredients(product)));
-    details.append(keys); article.append(details); return article;
+    details.append(element("span", "eyebrow", string(product?.brand, "The Ordinary")), element("h2", "", string(product?.name, "Untitled product")), element("p", "description", string(product?.description || product?.name)));
+    article.append(details); return article;
   }
-  async function load() {
-    if (busy) return;
-    busy = true; previous.disabled = next.disabled = true; retry.hidden = true;
-    grid.setAttribute("aria-busy", "true"); state.hidden = false; state.className = "state";
-    state.replaceChildren(element("div", "spinner"), document.createTextNode("Loading products…"));
-    var controller = new AbortController(), timeout = setTimeout(function () { controller.abort(); }, 65000);
-    try {
-      if (location.protocol === "file:") throw new Error("Open this file through the Glow Nuture backend at /ordinary-catalog. The private API key stays on the server.");
-      var response = await fetch("/api/catalog/ordinary?start=" + offset, {credentials:"same-origin",signal:controller.signal,headers:{Accept:"application/json"}});
-      var payload = await response.json().catch(function () { throw new Error("The catalog returned an unreadable response."); });
-      if (!response.ok) throw new Error(string(payload?.detail, "The catalog is unavailable. Please retry."));
-      var data = payload?.data ?? payload, products = data?.products ?? data;
-      if (!Array.isArray(products)) throw new Error("The catalog response did not contain a products array.");
-      var rows = products.filter(function (item) { return item && typeof item === "object" && !Array.isArray(item); });
-      grid.replaceChildren.apply(grid, rows.map(card));
-      document.getElementById("page").textContent = "Page " + (offset / limit + 1);
-      if (!rows.length) { state.textContent = "No products found on this page."; } else state.hidden = true;
-      previous.disabled = offset === 0; next.disabled = products.length < limit || offset >= 480;
-    } catch (error) {
-      grid.replaceChildren(); state.className = "state error"; state.textContent = error?.name === "AbortError" ? "The catalog request timed out. Please retry." : string(error?.message, "The catalog could not be loaded.");
-      retry.hidden = false; previous.disabled = offset === 0;
-    } finally { clearTimeout(timeout); grid.setAttribute("aria-busy", "false"); busy = false; }
+  function load() {
+    placeholder = new URL(mediaURL("/assets/no-image.svg"), document.baseURI).href;
+    var frontendURL = new URL("../", new URL(mediaURL("/assets/local-catalog.js"), document.baseURI));
+    var homeURL = location.protocol !== "file:" && frontendURL.pathname === "/" ? frontendURL : new URL("index.html", frontendURL);
+    document.querySelector("header .brand").href = homeURL.href;
+    var browseURL = new URL(homeURL.href); browseURL.hash = "/shop";
+    document.querySelector("header > a:last-child").href = browseURL.href;
+    var products = Array.isArray(window.GNLocalCatalog) ? window.GNLocalCatalog : [];
+    var rows = products.filter(function (product) {
+      return product && typeof product === "object" && /(?:the[\s_-]*)?ordinary/i.test([product.brand, product.name].filter(Boolean).join(" "));
+    });
+    grid.replaceChildren.apply(grid, rows.map(card));
+    state.hidden = rows.length > 0;
+    state.textContent = rows.length ? "" : "No images in this collection yet.";
+    grid.setAttribute("aria-busy", "false");
   }
-  previous.addEventListener("click", function () { if (!busy) { offset = Math.max(0, offset-limit); load(); } });
-  next.addEventListener("click", function () { if (!busy) { offset += limit; load(); } });
-  retry.addEventListener("click", load); load();
+  if(document.readyState === "loading")document.addEventListener("DOMContentLoaded", load, {once:true});
+  else load();
 }());
 </script>
 </body>

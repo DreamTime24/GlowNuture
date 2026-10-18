@@ -3,10 +3,15 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "test:frontend": "node --test tests/frontend.test.cjs",
+    "build:catalog": "node scripts/build_local_catalog.cjs",
+    "test:frontend": "node --test tests/frontend.test.cjs tests/local-catalog.test.cjs",
     "check:frontend": "node scripts/check_frontend.cjs"
   },
   "devDependencies": {
     "jsdom": "26.1.0"
+  },
+  "dependencies": {
+    "@supabase/server": "^1.9.2",
+    "firebase": "^13.0.0"
   }
 }

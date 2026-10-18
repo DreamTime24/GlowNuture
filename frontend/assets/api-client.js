@@ -8,10 +8,10 @@ window.GNApi=(()=>{
     if(window.GNAuth?.appCheckToken){const token=await GNAuth.appCheckToken();if(token)headers['X-Firebase-AppCheck']=token;}
     let response;
     try{response=await fetch(BASE+url,{credentials:'include',...options,headers,signal:options.signal||AbortSignal.timeout(65000)});}
-    catch(error){throw new Error(error.name==='TimeoutError'?'Server response দেরি হচ্ছে। পরে চেষ্টা করুন।':'Server connection হয়নি। আবার চেষ্টা করুন।');}
+    catch(error){throw new Error(error.name==='TimeoutError'?'The server is taking too long to respond. Please try again.':'Could not connect to the server. Please try again.');}
     if(!response.ok){
       const data=await response.json().catch(()=>({})),detail=data.detail;
-      const error=new Error(typeof detail==='string'?detail:Array.isArray(detail)?detail[0]?.msg||'তথ্য যাচাই করুন।':detail?.message||'Request failed. Try again.');
+      const error=new Error(typeof detail==='string'?detail:Array.isArray(detail)?detail[0]?.msg||'Please check your information.':detail?.message||'The server returned HTTP '+response.status+'. Please try again.');
       error.checks=Array.isArray(detail?.checks)?detail.checks:[];error.code=detail?.code||'';
       error.status=response.status;throw error;
     }

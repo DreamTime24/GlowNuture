@@ -51,6 +51,12 @@ GlowNuture-Commerce/                     <-- এখান থেকেই সব
 
 এই source-এ থাকা তিনটি SVG শুধু সাজসজ্জার illustration; এগুলো কোনো আসল পণ্যের ছবি নয়। বাস্তব পণ্যের ছবি ও অনুমতি owner-এর কাছ থেকে নিতে হবে। বিস্তারিত [পণ্য অনুমোদনের নির্দেশিকা](PRODUCT_APPROVAL_PLAYBOOK.md) দেখুন।
 
+### দেওয়া CSV/XLSX ক্যাটালগ import
+
+`run-local.bat` দিয়ে API ও catalog worker চালু করুন। Business owner (`super_admin`) হিসেবে sign in করে Admin → Catalog sources → **Import supplied catalogs** খুলুন। Source/metadata ব্যবহারের শর্ত যাচাই করে confirmation-এ টিক দিয়ে submit করলে server `GlowNuture_500_Products_Website.csv`, `The_Ordinary_GlowNuture_BD_Catalog.xlsx` এবং `Shajgoj_BDT_Product_Price_Catalog.csv`-এর জন্য তিনটি পৃথক অনুমোদিত file source তৈরি/পুনর্ব্যবহার করে তিনটি job queue করবে (500 + 12 + 227 row)। Job-এর status/count Admin-এ দেখুন। চাইলে আলাদাভাবে তিনটি source register করে প্রতিটি পুরো ফাইল upload করাও যায়; ফাইলপ্রতি সীমা 1 MB ও 500 product row, এবং 100-row worker page স্বয়ংক্রিয়ভাবে প্রক্রিয়াকৃত হয়। শুধু GitHub-এ ফাইল রাখলে store database-এ import হয় না।
+
+সব নতুন পণ্য private **DRAFT** হিসেবে আসে। Website CSV-তে GlowNuture দাম ও stock ফাঁকা; অন্য দুই ফাইলের দাম প্রতিযোগী দোকানের তথ্য, আপনার বিক্রয়মূল্য নয়। Image URL শুধু যাচাইয়ের candidate। Admin → Product review-এ আসল BDT দাম, বাস্তব stock, ingredient/usage, supplier ও মেয়াদ যাচাই করুন। ছবির স্বত্ব, অনুমতি এবং সঠিক product/variant-এর মিল দেখে অনুমোদিত URL থেকে managed media তৈরি করুন। তারপর আলাদা submit → verify → publish ধাপ শেষ করলে পণ্য দোকানে দেখা যাবে। ফাইলের স্বীকৃত কলাম ও নিয়ম [Product API নির্দেশিকায়](PRODUCT_API.md) আছে।
+
 ## 2. Firebase Hosting — ONLY একটি Preview
 
 Firebase Hosting static HTML/CSS/JS serve করতে পারে; আপনার private Python API, relational database এবং worker এখানে নিজে থেকে চলবে না। সেজন্য preview কেবল ডিজাইন/markup/asset পরিদর্শনের জন্য; product, account, cart, admin, stock, checkout-এর live functionality সেখানে কাজ করবে না। Generated preview-এর ওপরের দিকে ইচ্ছাকৃত **PREVIEW ONLY** notice থাকবে।

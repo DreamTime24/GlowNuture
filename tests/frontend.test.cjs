@@ -3,11 +3,13 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const {JSDOM,VirtualConsole}=require('jsdom');
 const fixture={id:1,sku:'OFFLINE-SKU',slug:'offline-product',name:'Offline product',en:'Offline product',brand:'Fixture',category:'skincare',sub:'serum',short:'Fixture short description',description:'Fixture description',price:120.25,compare:0,stock:5,size:'30 ml',origin:'',image_url:'https://example.com/product.png',active:true,content_verified:true,archived:false,tags:[],ingredients:['Fixture ingredient'],skin:[],images:[],usage:'Follow label',variants:[]};
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function setup({products=[fixture],failCatalog=false,hash='#/',legacy=null,user=null,reference=[],admin={}}={}){
+async function setup({products=[fixture],failCatalog=false,hash='#/',legacy=null,user=null,reference=[],admin={},reduced=true}={}){
   const errors=[],requests=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e));vc.on('error',e=>errors.push(e));
   const dom=new JSDOM(fs.readFileSync('frontend/index.html','utf8'),{url:'http://127.0.0.1:8000/'+hash,runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc}),w=dom.window;
   w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
-  w.matchMedia=q=>({matches:q.includes('prefers-reduced-motion'),addEventListener(){},removeEventListener(){}});
+  w.HTMLMediaElement.prototype.pause=()=>{};
+  w.HTMLMediaElement.prototype.load=()=>{};w.HTMLMediaElement.prototype.play=()=>Promise.resolve();
+  w.matchMedia=q=>({matches:q.includes('prefers-reduced-motion')&&reduced,addEventListener(){},removeEventListener(){}});
   w.IntersectionObserver=class{observe(){}unobserve(){}disconnect(){}};
   w.AbortSignal.timeout=AbortSignal.timeout;w.crypto.randomUUID=require('node:crypto').randomUUID;w.prompt=()=>null;w.confirm=()=>false;w.document.cookie='gn_csrf=offline-fixture';
   if(legacy)w.localStorage.setItem('gn_state_v2',JSON.stringify(legacy));
@@ -31,49 +33,27 @@ async function setup({products=[fixture],failCatalog=false,hash='#/',legacy=null
     else if(String(url).startsWith('/api/admin/'))data=admin[String(url)]??[];
     return new Response(JSON.stringify(data),{status:200,headers:{'content-type':'application/json'}});
   };
+  w.eval(fs.readFileSync('frontend/assets/media-paths.js','utf8'));
+  w.eval(fs.readFileSync('frontend/assets/local-catalog.js','utf8'));
+  w.GNLocalCatalog=products.map(p=>({...p,id:'p'+String(p.id).padStart(2,'0'),apiId:p.id,source:'api',displayOnly:false}));
   for(const file of ['api-client.js','app.js','glow-motion.js','glow-auth.js','firebase-bridge.js','commerce-ui.js','catalog-console.js','glow-admin.js'])w.eval(fs.readFileSync(path.join('frontend/assets',file),'utf8'));
   await pause(220);
   return {w,dom,errors,requests,close:()=>dom.window.close(),route:async next=>{w.location.hash=next;await pause(140);}};
 }
 const noErrors=s=>assert.equal(s.errors.length,0,s.errors.map(e=>e.message).join('\n'));
-async function standalone(payload,{file=false,failOnce=false}={}){
-  const errors=[],calls=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e));
-  const dom=new JSDOM(fs.readFileSync('frontend/catalog/index.html','utf8'),{url:file?'file:///catalog/index.html':'http://127.0.0.1:8000/ordinary-catalog',runScripts:'outside-only',virtualConsole:vc});
-  dom.window.fetch=async url=>{calls.push(url);const fail=failOnce&&calls.length===1;return new Response(JSON.stringify(fail?{detail:'Offline catalog unavailable'}:payload),{status:fail?503:200});};
-  dom.window.eval(dom.window.document.querySelector('script').textContent);await pause(25);
-  return {w:dom.window,errors,calls,close:()=>dom.window.close()};
-}
-test('standalone catalog safely accepts both provider data envelopes and image fallbacks',async()=>{
-  const product={name:'<img src=x onerror=alert(1)>',description:'<script>alert(1)</script>',price:9.5,currency:'BDT',images:[],image_url:'https://example.com/real.png',key_ingredients:[{name:'Zinc'}]};
-  for(const payload of [{data:{products:[product]}},{data:[product]}]){
-    const s=await standalone(payload);
-    try{
-      const article=s.w.document.querySelector('.card');assert.ok(article);assert.equal(article.querySelector('script'),null);assert.equal(article.querySelector('[onerror]'),null);
-      assert.match(article.textContent,/৳9.5 BDT/);assert.match(article.textContent,/Zinc/);const image=article.querySelector('img');assert.match(image.src,/example.com/);
-      image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/no-image.svg/);image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/^data:image\/svg\+xml/);assert.equal(image.onerror,null);noErrors(s);
-    }finally{s.close();}
-  }
-});
-test('standalone catalog displays a provider error and recovers with retry',async()=>{
-  const s=await standalone({data:[]},{failOnce:true});
-  try{assert.match(s.w.document.getElementById('state').textContent,/Offline catalog unavailable/);assert.equal(s.w.document.getElementById('retry').hidden,false);s.w.document.getElementById('retry').click();await pause(25);assert.match(s.w.document.getElementById('state').textContent,/No products found/);assert.equal(s.calls.length,2);noErrors(s);}finally{s.close();}
-});
-test('standalone catalog opened as a file explains the required server without calling the private provider',async()=>{
-  const s=await standalone([],{file:true});
-  try{assert.equal(s.calls.length,0);assert.match(s.w.document.getElementById('state').textContent,/backend at \/ordinary-catalog/);noErrors(s);}finally{s.close();}
-});
 test('empty server catalog does not display demo stock or restore persisted credentials',async()=>{
   const s=await setup({products:[],legacy:{products:[{id:'p01',name:'Fake persisted item'}],user:{name:'Fake admin',role:'super_admin'},orders:[{customer:{phone:'private'}}]}});
   try{assert.equal(s.w.GNStore.store.products().length,0);assert.equal(s.w.GNStore.store.state.user,null);assert.equal(s.w.localStorage.getItem('gn_state_v2'),null);noErrors(s);}finally{s.close();}
 });
-test('homepage hero uses bundled illustrations only when the public catalog is empty',async()=>{
+test('homepage hero uses bundled product photos when the public catalog is empty',async()=>{
   const empty=await setup({products:[]});
   try{
     const hero=empty.w.document.querySelector('.hero-visual .hv-inner');
     const paths=Array.from(hero.querySelectorAll('img'),img=>new URL(img.src).pathname);
     assert.equal(hero.classList.contains('hv-inner--illustrations'),true);
-    assert.deepEqual(paths,['/media/products/hero-cleanser.svg','/media/products/hero-serum.svg','/media/products/hero-sunscreen.svg']);
-    for(const image of hero.querySelectorAll('img')){assert.equal(image.alt,'');assert.ok(fs.existsSync(path.join('frontend',new URL(image.src).pathname.slice(1))));}
+    assert.deepEqual(paths,['/assets/image/cerave-foaming-facial-cleanser.jpg','/assets/image/the-ordinary-niacinamide-10-plus-zinc-1.jpg','/assets/image/skin1004-sun-serum.jpg']);
+    for(const source of paths)assert.match(source,/^\/assets\/image\/[a-z0-9-]+\.jpg$/);
+    for(const image of hero.querySelectorAll('img')){assert.ok(image.alt.length>0);assert.ok(fs.existsSync(path.join('frontend',new URL(image.src).pathname.slice(1))));}
     noErrors(empty);
   }finally{empty.close();}
   const populated=await setup();
@@ -85,21 +65,50 @@ test('homepage hero uses bundled illustrations only when the public catalog is e
     noErrors(populated);
   }finally{populated.close();}
 });
-test('catalog failure shows a retryable error, with no demo inventory',async()=>{
+test('homepage cycles through all bundled hero background videos muted',async()=>{
+  const s=await setup({products:[],reduced:false});
+  try{
+    const video=s.w.document.querySelector('[data-hero-background-video]');
+    assert.ok(video);
+    assert.equal(video.hasAttribute('muted'),true);
+    assert.equal(video.hasAttribute('autoplay'),true);
+    assert.equal(video.hasAttribute('playsinline'),true);
+    const playlist=video.dataset.videoPlaylist.split('|');
+    const videoDirectory=path.join('frontend','assets','videos');
+    assert.equal(playlist.length,4);
+    for(const source of playlist){
+      const filename=decodeURIComponent(source.split('/').pop());
+      assert.ok(fs.existsSync(path.join(videoDirectory,filename)),`missing background video: ${filename}`);
+    }
+    assert.equal(video.getAttribute('src'),playlist[0]);
+    video.load=()=>{};
+    video.play=()=>Promise.resolve();
+    for(let index=1;index<=playlist.length;index++){
+      video.dispatchEvent(new s.w.Event('ended'));
+      assert.equal(video.getAttribute('src'),playlist[index%playlist.length]);
+    }
+    noErrors(s);
+  }finally{s.close();}
+});
+test('catalog rendering does not request the retired product API',async()=>{
   const s=await setup({failCatalog:true,hash:'#/shop'});
-  try{assert.match(s.w.document.getElementById('app').textContent,/Offline fixture catalog failure/);assert.ok(s.w.document.querySelector('[data-action=retry-catalog]'));assert.equal(s.w.GNStore.store.products().length,0);noErrors(s);}finally{s.close();}
+  try{assert.match(s.w.document.getElementById('app').textContent,/Offline product/);assert.equal(s.w.document.querySelector('[data-action=retry-catalog]'),null);assert.equal(s.requests.some(r=>r.url==='/api/products'),false);noErrors(s);}finally{s.close();}
 });
 test('official social links and product images render',async()=>{
   const s=await setup({hash:'#/shop'});
   try{assert.equal(s.w.document.querySelector('a[aria-label=Facebook]').href,'https://www.facebook.com/glownuturebd');assert.match(s.w.document.querySelector('.pcard img').src,/example.com/);assert.ok(s.w.document.querySelector('.gn-card-ingredients'));noErrors(s);}finally{s.close();}
 });
-test('broken images fall back once without inline event handlers',async()=>{
-  const s=await setup({hash:'#/shop'});
-  try{const image=s.w.document.querySelector('.pcard img');image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/no-image.svg/);image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/no-image.svg/);assert.equal(image.hasAttribute('onerror'),false);noErrors(s);}finally{s.close();}
+test('products without a photo use the local placeholder instead of random third-party imagery',async()=>{
+  const s=await setup({products:[{...fixture,image_url:null,images:[]}],hash:'#/shop'});
+  try{assert.match(s.w.document.querySelector('.pcard img').src,/\/assets\/no-image\.svg$/);noErrors(s);}finally{s.close();}
 });
-test('untrusted upstream strings stay escaped in reference cards',async()=>{
+test('broken product photos fall back to the local placeholder without inline handlers',async()=>{
+  const s=await setup({hash:'#/shop'});
+  try{const image=s.w.document.querySelector('.pcard img');image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/no-image\.svg/);image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/no-image\.svg/);assert.equal(image.hasAttribute('onerror'),false);noErrors(s);}finally{s.close();}
+});
+test('untrusted catalog strings stay escaped in Ordinary cards',async()=>{
   const s=await setup({hash:'#/ordinary',reference:[{name:'<img src=x onerror=alert(1)>',description:'<script>alert(1)</script>',ingredients:['"><svg onload=alert(1)>'],price:null,images:[]}]});
-  try{assert.equal(s.w.document.querySelector('#app script'),null);assert.equal(s.w.document.querySelector('#app [onload]'),null);assert.equal(s.w.document.querySelector('#app [onerror]'),null);assert.match(s.w.document.getElementById('app').textContent,/Price not provided/);noErrors(s);}finally{s.close();}
+  try{assert.equal(s.w.document.querySelector('#app script'),null);assert.equal(s.w.document.querySelector('#app [onload]'),null);assert.equal(s.w.document.querySelector('#app [onerror]'),null);assert.match(s.w.document.getElementById('app').textContent,/<script>alert\(1\)<\/script>/);noErrors(s);}finally{s.close();}
 });
 test('cart limits, comparison and persistence use IDs and quantities only',async()=>{
   const s=await setup({hash:'#/shop'});
@@ -154,18 +163,26 @@ test('core routes remain usable without runtime exceptions',async()=>{
   }finally{s.close();}
 });
 
+test('storefront document and customer-facing routes use English copy',async()=>{
+  const s=await setup();
+  try{
+    assert.equal(s.w.document.documentElement.lang,'en');
+    for(const route of ['#/','#/shop','#/cart','#/page/about','#/page/delivery','#/page/contact']){
+      await s.route(route);
+      assert.doesNotMatch(s.w.document.body.textContent.replace(/৳/g,''),/[\u0980-\u09FF]/,route);
+    }
+    noErrors(s);
+  }finally{s.close();}
+});
+
 test('responsive image candidates clear srcset and try an alternate before placeholder',async()=>{
   const p={...fixture,image_url:'/media/assets/qa/main.webp',images:['/media/assets/qa/other.webp'],image_assets:[{url:'/media/assets/qa/main.webp',width:800,height:1000,variants:[{url:'/media/assets/qa/small.webp',width:320,height:400},{url:'/media/assets/qa/medium.webp',width:640,height:800}]}]};
   const s=await setup({products:[p],hash:'#/p/offline-product'});
-  try{const image=s.w.document.querySelector('#pdMain img');assert.match(image.srcset,/320w/);assert.equal(image.getAttribute('loading'),'eager');image.dispatchEvent(new s.w.Event('error'));assert.equal(image.hasAttribute('srcset'),false);assert.match(image.src,/other.webp/);image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/no-image.svg/);noErrors(s);}finally{s.close();}
+  try{const image=s.w.document.querySelector('#pdMain img');assert.match(image.srcset,/320w/);assert.equal(image.getAttribute('loading'),'eager');image.dispatchEvent(new s.w.Event('error'));assert.equal(image.hasAttribute('srcset'),false);assert.match(image.src,/other.webp/);image.dispatchEvent(new s.w.Event('error'));assert.match(image.src,/no-image\.svg/);noErrors(s);}finally{s.close();}
 });
-test('approved local collection prices use BDT and safely escapes product metadata',async()=>{
+test('approved commerce fixture prices remain BDT in the Ordinary collection',async()=>{
   const s=await setup({hash:'#/ordinary',reference:[{...fixture,currency:'BDT'}]});
   try{assert.match(s.w.document.getElementById('app').textContent,/৳120.25/);assert.ok(s.w.document.querySelector('a[href="#/p/offline-product"]'));noErrors(s);}finally{s.close();}
-});
-test('standalone collection refuses to relabel a foreign price as BDT',async()=>{
-  const s=await standalone({data:[{...fixture,currency:'GBP'}]});
-  try{assert.match(s.w.document.querySelector('.price').textContent,/Price unavailable/);assert.doesNotMatch(s.w.document.querySelector('.price').textContent,/120/);noErrors(s);}finally{s.close();}
 });
 const staff={id:9,name:'Offline staff',role:'super_admin',firebase_uid:'offline-staff',email_verified:true,preferences:{},addresses:[]};
 const reviewProduct={...fixture,revision:3,publication_state:'DRAFT',expiry_required:true};
@@ -181,6 +198,52 @@ test('approval inspector shows all owner conditions, private previews and posts 
 test('free source setup never prechecks owner authorization or stores a key in the browser',async()=>{
   const s=await setup({hash:'#/admin/imports',user:staff,admin:{'/api/admin/catalog/sources':[],'/api/admin/catalog/jobs':[],'/api/admin/catalog/duplicates':[]}});
   try{const prefill=s.w.document.querySelector('[data-catalog-action=obf-prefill]');assert.ok(prefill);prefill.click();const f=s.w.document.querySelector('[data-catalog-form=source]');assert.equal(f.elements.kind.value,'openbeautyfacts');assert.equal(f.elements.credential.value,'');assert.equal(f.elements.owner_authorized.checked,false);assert.match(f.elements.license.value,/ODbL/);noErrors(s);}finally{s.close();}
+});
+test('authorized file import accepts XLSX and explains the private draft flow',async()=>{
+  const source={id:5,key:'owner-catalog',name:'Owner catalog',kind:'file',enabled:true};
+  const s=await setup({hash:'#/admin/imports',user:staff,admin:{'/api/admin/catalog/sources':[source],'/api/admin/catalog/jobs':[],'/api/admin/catalog/duplicates':[]}});
+  try{
+    const upload=s.w.document.querySelector('[data-catalog-form=feed]');assert.ok(upload);
+    assert.match(upload.elements.file.accept,/\.xlsx/);
+    assert.match(upload.textContent,/one complete CSV, JSON or XLSX file \(up to 500 rows and 1 MB\)/);
+    assert.match(upload.textContent,/private drafts/);
+    assert.match(upload.textContent,/separate owner-authorized file source for each dataset/);
+    noErrors(s);
+  }finally{s.close();}
+});
+test('only the owner can queue bundled drafts after confirming source reuse review',async()=>{
+  const adminData={'/api/admin/catalog/sources':[],'/api/admin/catalog/jobs':[],'/api/admin/catalog/duplicates':[]};
+  const s=await setup({hash:'#/admin/imports',user:staff,admin:adminData});
+  try{
+    const form=s.w.document.querySelector('[data-catalog-form=bundled]');assert.ok(form);
+    assert.match(form.textContent,/500 \+ 12 \+ 227 rows/);assert.match(form.textContent,/private drafts/);
+    assert.equal(form.elements.owner_authorized.checked,false);assert.equal(form.elements.owner_authorized.required,true);
+    form.dispatchEvent(new s.w.Event('submit',{bubbles:true,cancelable:true}));await pause(25);
+    assert.equal(s.requests.some(r=>r.url==='/api/admin/catalog/bundled-imports'),false);
+    form.elements.owner_authorized.checked=true;
+    form.dispatchEvent(new s.w.Event('submit',{bubbles:true,cancelable:true}));await pause(160);
+    const request=s.requests.find(r=>r.url==='/api/admin/catalog/bundled-imports');assert.ok(request);
+    assert.equal(request.method,'POST');assert.equal(request.body.owner_authorized,true);
+    assert.match(request.body.request_id,/^[a-f0-9]{32}$/);
+    noErrors(s);
+  }finally{s.close();}
+  const delegated=await setup({hash:'#/admin/imports',user:{...staff,role:'admin'},admin:adminData});
+  try{assert.equal(delegated.w.document.querySelector('[data-catalog-form=bundled]'),null);noErrors(delegated);}finally{delegated.close();}
+});
+test('source image candidates remain unverified and only prefill the permission form',async()=>{
+  const url='https://images.example.test/verified-path.jpg';
+  const source={id:10,source_id:5,external_id:'sku-one',changes_json:{},snapshot_json:{image_candidates:[{url,reported_license:'<svg onload=alert(1)>'},{url:'javascript:alert(1)'},{url:'http://example.test/insecure.jpg'},{url:'https://user:secret@example.test/private.jpg'}]}};
+  const s=await setup({hash:'#/admin/approval?id=1',user:staff,admin:{'/api/admin/products/1/approval':{product:reviewProduct,checks:[],media:[],history:[]},'/api/admin/products/1/sources':[source],'/api/admin/suppliers':[]}});
+  try{
+    const doc=s.w.document,candidates=doc.querySelectorAll('img[alt^="Unverified source image candidate"]');assert.equal(candidates.length,1);
+    assert.equal(candidates[0].getAttribute('referrerpolicy'),'no-referrer');
+    assert.equal(doc.querySelector('#gn-admin [onload]'),null);assert.equal(doc.querySelector('#gn-admin script'),null);
+    const link=doc.querySelector('a[href="'+url+'"]');assert.ok(link);assert.match(link.rel,/noopener/);assert.match(link.rel,/noreferrer/);assert.equal(link.getAttribute('referrerpolicy'),'no-referrer');
+    const remote=doc.querySelector('[data-catalog-form=remote]');assert.ok(remote);assert.equal(remote.elements.url.value,'');
+    doc.querySelector('[data-catalog-action=candidate-url]').click();assert.equal(remote.elements.url.value,url);assert.equal(remote.closest('details').open,true);
+    assert.equal(s.requests.some(r=>r.url.includes('/api/admin/media/from-url')),false);
+    noErrors(s);
+  }finally{s.close();}
 });
 test('inventory staff can submit a draft but never see owner verification controls',async()=>{
   const s=await setup({hash:'#/admin/approval?id=1',user:{...staff,role:'inventory_manager'},admin:{'/api/admin/products/1/approval':{product:reviewProduct,checks:[],media:[],history:[]},'/api/admin/products/1/sources':[], '/api/admin/suppliers':[]}});

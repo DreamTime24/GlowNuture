@@ -61,17 +61,17 @@ body.gn-home .section-alt,body.gn-home .trust{background:transparent}
 .gn-dot{position:relative;display:grid;gap:8px;justify-items:center;font-size:.8rem;color:var(--muted);font-weight:600}
 .gn-dot::before{content:"";width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--line-strong);transition:all .4s var(--ease)}
 .gn-dot.on{color:var(--sage-deep)}.gn-dot.on::before{background:var(--sage);border-color:var(--sage);box-shadow:0 0 0 6px rgba(111,132,104,.18)}
-.gn-story-art{position:relative;aspect-ratio:1/1.05;max-height:62vh;border-radius:var(--r-lg);background:radial-gradient(circle at 50% 38%,#fff,var(--sage-soft) 70%);display:grid;place-items:center;box-shadow:var(--sh)}
-.gn-art{grid-area:1/1;width:46%;opacity:0;scale:.86;rotate:-6deg;filter:blur(8px);transition:all .8s var(--ease)}
+.gn-story-art{position:relative;aspect-ratio:1/1.05;max-height:62vh;border-radius:var(--r-lg);background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:var(--sh)}
+.gn-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:clamp(16px,3vw,30px);opacity:0;scale:.86;rotate:-6deg;filter:blur(8px);transition:all .8s var(--ease)}
 .gn-art.on{opacity:1;scale:1;rotate:0deg;filter:none}
 
 /* 16 before / after */
 .gn-ritual .wrap{max-width:980px}.gn-ritual h2{margin-bottom:8px}.gn-ritual p.sub{color:var(--muted);margin-bottom:26px}
 .gn-ba{--pos:50%;position:relative;aspect-ratio:16/9;border-radius:var(--r-lg);overflow:hidden;touch-action:pan-y;cursor:ew-resize;box-shadow:var(--sh);user-select:none}
 .gn-ba-pane{position:absolute;inset:0;display:grid;place-items:center}
-.gn-ba-night{background:linear-gradient(135deg,#2f3b2c,#4e6149)}
-.gn-ba-day{background:linear-gradient(135deg,#fbf1dc,#f7e8ea);clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
-.gn-ba-pane img{width:min(24%,190px);filter:drop-shadow(0 14px 20px rgba(0,0,0,.25))}
+.gn-ba-night{background:#fff}
+.gn-ba-day{background:#fff;clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+.gn-ba-pane img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center 65%;pointer-events:none}
 .gn-ba-pane span{position:absolute;top:16px;font:700 .9rem 'Inter',sans-serif;padding:6px 14px;border-radius:var(--r-full);background:rgba(255,255,255,.85);color:var(--charcoal)}
 .gn-ba-day span{left:16px}.gn-ba-night span{right:16px}
 .gn-ba-handle{position:absolute;top:0;bottom:0;left:var(--pos);width:3px;background:#fff;translate:-50% 0}

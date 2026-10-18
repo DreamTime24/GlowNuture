@@ -10,6 +10,10 @@ The pipeline creates UUID directories containing main (max 1600px), thumb (160px
 
 Draft photographs are served through authenticated, no-store /api/admin/media/{id}/preview. Public /media/assets/... requests require an approved asset belonging to a currently eligible published product. Do not bypass this route with an Nginx public directory alias. The old local links of grandfathered live products are preserved.
 
+## Upload product photos
+
+From Admin → Products, choose “Upload / manage images” for the product. In its review inspector, upload a JPEG, PNG or WebP photograph (up to 5 MB), record the rights details, and confirm the exact product match. The server creates optimized WebP sizes; select the main image and gallery, then complete the normal review and publish workflow. This self-hosted path has no per-image API fee and avoids unreliable hotlinks or random, potentially misleading product imagery.
+
 ## Free image/reference API
 
 Open Beauty Facts integration is available without a private read key. Source data can include image candidates; importing metadata does not automatically download or publish photographs. Select the correct reference, check license/attribution and physical product/variant match, then use the authorized URL importer to store a permitted copy.
@@ -44,7 +48,9 @@ Health can detect missing/corrupt files and binding errors. It cannot identify a
 
 ## Frontend reliability
 
-Homepage/category/search/detail/cart/compare cards use actual API image URLs, responsive srcset/sizes when available, meaningful alt text, fixed intrinsic dimensions and object-fit containment. Detail main image is eager; other images lazy-load. On error the renderer clears responsive sources, tries gallery alternatives and finally uses the local no-image SVG once. The placeholder is not a product photograph.
+Homepage/category/search/detail/cart/compare cards use actual API image URLs, responsive srcset/sizes when available, meaningful alt text, fixed intrinsic dimensions and object-fit containment. Detail main image is eager; other images lazy-load. On error the renderer clears responsive sources, tries gallery alternatives and finally uses the local no-image SVG. Products without an image use that same local placeholder instead of an external random-photo service. The placeholder is not a product photograph.
+
+Catalog request errors are separate from image errors: a failed `/api/products` request means the backend catalog did not return successfully. The storefront reports the HTTP status when the response has no useful error detail; check `/api/health`, `/api/ready` and server logs before retrying.
 
 Tests exercise generated, conspicuously labelled QA photographs in disposable directories, actual WebP responses and private/public access. These are not production product assets. JSDOM tests verify DOM/handlers; real device geometry, visual matching and real owner photographs remain owner acceptance checks.
 

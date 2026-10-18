@@ -81,7 +81,7 @@ def create_job(payload:ImportJobIn,request:Request,db=Depends(get_db),principal=
     rate_limit("catalog-job:"+str(actor.id),10,60)
     source=db.get(CatalogSource,payload.source_id)
     if not source:raise HTTPException(404,"Source not found")
-    if source.kind=="file":raise HTTPException(422,"Upload CSV/JSON for a file source")
+    if source.kind=="file":raise HTTPException(422,"Upload CSV/JSON/XLSX for a file source")
     if payload.pages>get_settings().catalog_max_pages:raise HTTPException(422,"Too many pages for one bounded job")
     return job_out(catalog_jobs.enqueue(db,source,actor,payload.request_id,payload.start,payload.pages))
 

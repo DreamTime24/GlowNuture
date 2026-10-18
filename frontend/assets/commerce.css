@@ -1,6 +1,23 @@
 /* Extends the original palette and typography; existing animation styles are retained. */
-.gn-product-image{width:100%;height:100%;display:block;object-fit:contain;padding:12%;background:var(--surface-2)}.pcard-media>a{display:block;width:100%;height:100%}.pd-main .gn-product-image{padding:8%}
+.gn-product-image{width:100%;height:100%;display:block;object-fit:contain;object-position:center;padding:8%;background:#fff}.pcard-media>a{display:block;width:100%;height:100%}.pd-main .gn-product-image{padding:8%}
+.pcard-media,.pd-main,.pd-thumb,.qv-media,.cart-thumb,.co-line-img,.suggest .sg-img{background:#fff}
+.cat-card .cc-art,.jcard .jc-art{background:#fff}
+.cc-art .gn-product-image,.jc-art .gn-product-image{min-height:0;object-fit:contain;padding:8%}
 .pcard-short{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pcard-local .pcard-short{display:block;-webkit-line-clamp:unset;overflow:visible;overflow-wrap:anywhere}
+.pcard-local .pcard-actions{margin-top:auto;flex-wrap:wrap}
+.pcard-local .pcard-actions .btn{flex:1}
+.pcard-local .gn-product-image{padding:clamp(12px,1.6vw,24px);object-fit:contain;background:#fff}
+.hero-visual .hv-inner>div{min-width:0;max-height:100%;height:100%}
+.hero-visual .hv-inner .gn-product-image{height:auto;max-height:100%;padding:0;border-radius:14px;object-fit:contain;box-shadow:0 14px 22px rgba(34,31,28,.14)}
+.pd-local .pd-short{overflow-wrap:anywhere}
+@media(max-width:720px){
+  :root{--header-h:118px}
+  .header-main{height:auto;min-height:var(--header-h);flex-wrap:wrap;gap:8px;padding-block:10px}
+  .header-main .brand{flex:1}
+  .header-main .search-wrap{order:5;flex:1 0 100%;min-width:0;max-width:none}
+  .header-actions{margin-left:auto}
+}
 .gn-card-ingredients{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);font-size:.72rem;color:var(--muted);line-height:1.6}.gn-card-ingredients small{display:block;font-weight:700;color:var(--charcoal)}.gn-card-ingredients span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .gn-spinner{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--sage);border-radius:50%;animation:gnSpin .8s linear infinite;margin:20px auto}@keyframes gnSpin{to{transform:rotate(360deg)}}
 .gn-private-code{display:block;overflow-wrap:anywhere;background:var(--surface-2);padding:12px;margin:12px 0;border-radius:var(--r);font: .9rem monospace;user-select:all}

@@ -15,6 +15,7 @@ click==8.5.0
 cryptography==50.0.2
 dnspython==2.9.0
 email-validator==2.3.0
+et-xmlfile==2.0.0
 fastapi==0.143.0
 firebase-admin==7.7.0
 google-api-core==2.42.0
@@ -40,6 +41,7 @@ mako==1.4.3
 markupsafe==3.0.4
 msgpack==1.2.3
 opentelemetry-api==1.45.1
+openpyxl==3.1.5
 packaging==26.3
 pillow==12.3.0
 pluggy==1.6.0

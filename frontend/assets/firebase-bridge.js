@@ -4,11 +4,11 @@
 const CDN='https://www.gstatic.com/firebasejs/11.10.0/';
 let sdk,pending,resolver,totpSecret,appCheck,captchaScript;
 const toast=(m,t)=>window.GNStore?.toast(m,t);
-const errorMessage=e=>({'auth/invalid-credential':'Email বা password সঠিক নয়।','auth/operation-not-allowed':'Firebase Console-এ provider চালু করুন।','auth/unauthorized-domain':'Firebase authorized domains-এ এই domain যোগ করুন।','auth/popup-blocked':'Sign-in popup অনুমোদন করুন।','auth/popup-closed-by-user':'Sign-in popup বন্ধ হয়েছে।','auth/email-already-in-use':'এই email-এর account আছে। Sign in বা reset করুন।','auth/requires-recent-login':'Sign out করে আবার sign in করুন।'}[e.code]||e.message||'Authentication failed.');
+const errorMessage=e=>({'auth/invalid-credential':'Incorrect email or password.','auth/operation-not-allowed':'Enable this provider in the Firebase Console.','auth/unauthorized-domain':'Add this domain to Firebase authorized domains.','auth/popup-blocked':'Allow the sign-in popup to open.','auth/popup-closed-by-user':'The sign-in popup was closed.','auth/email-already-in-use':'An account already exists for this email. Sign in or reset your password.','auth/requires-recent-login':'Sign out and sign in again.'}[e.code]||e.message||'Authentication failed.');
 async function init(){
   if(pending)return pending;
   pending=(async()=>{
-    const cfg=await GNConfigReady;if(!cfg.firebase?.enabled)throw new Error('Firebase sign-in এখন unavailable.');
+    const cfg=await GNConfigReady;if(!cfg.firebase?.enabled)throw new Error('Firebase sign-in is currently unavailable.');
     const [appSDK,authSDK]=await Promise.all([import(CDN+'firebase-app.js'),import(CDN+'firebase-auth.js')]);
     const app=appSDK.getApps().length?appSDK.getApp():appSDK.initializeApp(cfg.firebase.config),auth=authSDK.getAuth(app);
     await authSDK.setPersistence(auth,authSDK.browserLocalPersistence);await auth.authStateReady();
@@ -30,7 +30,7 @@ async function loadCaptcha(){
   if(window.grecaptcha?.render)return;
   if(!captchaScript)captchaScript=new Promise((resolve,reject)=>{
     const script=document.createElement('script');script.src='https://www.google.com/recaptcha/api.js?render=explicit';script.async=true;script.defer=true;
-    script.onload=()=>grecaptcha.ready(resolve);script.onerror=()=>reject(new Error('Verification challenge load হয়নি।'));document.head.append(script);
+    script.onload=()=>grecaptcha.ready(resolve);script.onerror=()=>reject(new Error('Could not load the verification challenge.'));document.head.append(script);
   }).catch(error=>{captchaScript=null;throw error;});
   return captchaScript;
 }
@@ -48,7 +48,7 @@ async function captcha(action,scope=document){
   }
   await mountCaptcha();
   const box=scope.querySelector('[data-recaptcha]')||document.querySelector('[data-recaptcha="login"]'),widget=box&&captchaWidgets.get(box),token=widget===undefined?'':grecaptcha.getResponse(widget);
-  if(!token)throw new Error('Verification challenge সম্পন্ন করুন।');
+  if(!token)throw new Error('Complete the verification challenge.');
   return token;
 }
 async function exchange(user,name,form){
@@ -57,15 +57,15 @@ async function exchange(user,name,form){
 }
 async function complete(result,name,form){
   resolver=null;const user=await exchange(result.user,name,form);
-  toast(user.email_verified?'Signed in.':'Verification email দেখুন; order দিতে email verify করুন।','ok');
+  toast(user.email_verified?'Signed in.':'Check your email and verify it before placing an order.','ok');
   const intended=sessionStorage.getItem('gn_return_to');sessionStorage.removeItem('gn_return_to');
   location.hash=intended==='admin'&&user.role!=='customer'?'#/admin':'#/account';
 }
 async function mfa(error){
   const s=await init();resolver=s.getMultiFactorResolver(s.auth,error);
-  if(!resolver.hints.some(h=>h.factorId==='totp'))throw new Error('Configured second factor TOTP নয়। Supported provider setup যাচাই করুন।');
-  const box=document.querySelector('.gn-auth-form .co-card');if(!box)throw new Error('Account sign-in page খুলে MFA করুন।');
-  box.innerHTML='<h2>Staff verification</h2><p>Authenticator-এর 6-digit code লিখুন।</p><form data-firebase="mfa"><label class="field"><span class="lbl">Code</span><input class="input en" name="code" required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code"></label><div data-recaptcha="login"></div><button class="btn btn-primary btn-block" type="submit">Verify</button></form>';
+  if(!resolver.hints.some(h=>h.factorId==='totp'))throw new Error('The configured second factor is not TOTP. Check the supported provider setup.');
+  const box=document.querySelector('.gn-auth-form .co-card');if(!box)throw new Error('Open the account sign-in page to complete MFA.');
+  box.innerHTML='<h2>Staff verification</h2><p>Enter the 6-digit code from your authenticator app.</p><form data-firebase="mfa"><label class="field"><span class="lbl">Code</span><input class="input en" name="code" required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code"></label><div data-recaptcha="login"></div><button class="btn btn-primary btn-block" type="submit">Verify</button></form>';
   await mountCaptcha();
 }
 async function logout(){
@@ -85,21 +85,21 @@ document.addEventListener('submit',async event=>{
       const result=await s.createUserWithEmailAndPassword(s.auth,get('email'),get('password'));
       await s.updateProfile(result.user,{displayName:get('name')});await s.sendEmailVerification(result.user);await complete(result,get('name'),form);
     }else if(kind==='mfa'){
-      if(!resolver)throw new Error('Sign-in আবার শুরু করুন।');
+      if(!resolver)throw new Error('Start signing in again.');
       const hint=resolver.hints.find(h=>h.factorId==='totp');
       await complete(await resolver.resolveSignIn(s.TotpMultiFactorGenerator.assertionForSignIn(hint.uid,get('code'))),null,form);
-    }else if(kind==='reset'){await s.sendPasswordResetEmail(s.auth,get('email'));toast('Account থাকলে reset email পাঠানো হবে।','ok');form.reset();}
+    }else if(kind==='reset'){await s.sendPasswordResetEmail(s.auth,get('email'));toast('If an account exists, a password reset email will be sent.','ok');form.reset();}
     else if(kind==='totp-start'){
-      if(!s.auth.currentUser?.emailVerified)throw new Error('Verified email দিয়ে sign in করুন।');
+      if(!s.auth.currentUser?.emailVerified)throw new Error('Sign in with a verified email address.');
       await s.reauthenticateWithCredential(s.auth.currentUser,s.EmailAuthProvider.credential(s.auth.currentUser.email,get('password')));
       totpSecret=await s.TotpMultiFactorGenerator.generateSecret(await s.multiFactor(s.auth.currentUser).getSession());
       const box=document.getElementById('gnTotpEnroll');
-      box.innerHTML='<p class="note-box">Authenticator app-এ secret manual entry করুন। কাউকে দেবেন না।</p><code class="gn-private-code"></code><form data-firebase="totp-finish"><label class="field"><span class="lbl">6-digit code</span><input class="input en" name="code" required pattern="[0-9]{6}" autocomplete="one-time-code"></label><button class="btn btn-primary" type="submit">Confirm MFA</button></form>';
+      box.innerHTML='<p class="note-box">Enter this secret manually in your authenticator app. Do not share it with anyone.</p><code class="gn-private-code"></code><form data-firebase="totp-finish"><label class="field"><span class="lbl">6-digit code</span><input class="input en" name="code" required pattern="[0-9]{6}" autocomplete="one-time-code"></label><button class="btn btn-primary" type="submit">Confirm MFA</button></form>';
       box.querySelector('code').textContent=totpSecret.secretKey;
     }else if(kind==='totp-finish'){
-      if(!totpSecret||!s.auth.currentUser)throw new Error('Enrollment আবার শুরু করুন।');
+      if(!totpSecret||!s.auth.currentUser)throw new Error('Start enrollment again.');
       await s.multiFactor(s.auth.currentUser).enroll(s.TotpMultiFactorGenerator.assertionForEnrollment(totpSecret,get('code')),'Glow Nuture staff');
-      totpSecret=null;await logout();toast('MFA enabled. আবার sign in করুন।','ok');location.hash='#/account';
+      totpSecret=null;await logout();toast('MFA enabled. Sign in again.','ok');location.hash='#/account';
     }
   }catch(error){if(error.code==='auth/multi-factor-auth-required'){try{await mfa(error);}catch(next){toast(errorMessage(next),'err');}}else toast(errorMessage(error),'err');}
   finally{delete form.dataset.busy;if(button)button.disabled=false;const box=form.querySelector('[data-recaptcha]'),widget=box&&captchaWidgets.get(box);if(widget!==undefined)window.grecaptcha?.reset(widget);}

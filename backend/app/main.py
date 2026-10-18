@@ -42,6 +42,8 @@ from .api.catalog_admin import router as catalog_admin_router
 app.include_router(catalog_admin_router)
 from .api.catalog_sources import router as catalog_sources_router
 app.include_router(catalog_sources_router)
+from .api.catalog_bundles import router as catalog_bundles_router
+app.include_router(catalog_bundles_router)
 @app.exception_handler(RequestValidationError)
 async def validation_error(request,error):
     return JSONResponse({"detail":[{"loc":item["loc"],"msg":item["msg"],"type":item["type"]} for item in error.errors()]},status_code=422)
@@ -59,5 +61,5 @@ def standalone_catalog():
     path=FRONTEND/"catalog"/"index.html"
     scripts=re.findall(r"<script>(.*?)</script>",path.read_text(encoding="utf8"),flags=re.S)
     hashes=" ".join("'sha256-"+base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()+"'" for script in scripts)
-    policy="default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; script-src "+hashes+"; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self'"
+    policy="default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self' "+hashes+"; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self'"
     return FileResponse(path,headers={"Cache-Control":"no-cache","Content-Security-Policy":policy})

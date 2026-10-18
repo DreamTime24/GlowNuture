@@ -28,7 +28,7 @@ Firebase identity is verified server-side; signing in never grants a staff role 
 ## Working catalog
 
 - Free Open Beauty Facts reference adapter; no private read key required.
-- Owner UTF-8 CSV/JSON feeds and authorized supplier GET/POST APIs.
+- Owner-authorized CSV/JSON/XLSX feeds (one complete file per source; CSV/JSON use UTF-8) and authorized supplier GET/POST APIs. The owner-only **Import supplied catalogs** action queues the three provided datasets as private drafts; see [docs/PRODUCT_API.md](docs/PRODUCT_API.md).
 - Existing Ordinary/Parse integration behind rotated server-key configuration.
 - Durable paginated jobs, source identity/deduplication, retries, content diffs and manual duplicate mapping.
 - All new products start DRAFT and UNVERIFIED, with zero local price/stock and no auto-published photographs.

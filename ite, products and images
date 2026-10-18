@@ -1,0 +1,247 @@
+ .../extension-to-functions-codebase/SKILL.md       |  130 [32m+[m
+ .../references/configuration-migration.md          |  161 [32m++[m
+ .../references/destructuring-shim.md               |  122 [32m+[m
+ .../references/signature-mapping.md                |   84 [32m+[m
+ .agents/skills/firebase-ai-logic-basics/SKILL.md   |  289 [32m++[m
+ .../references/flutter_setup.md                    |  135 [32m+[m
+ .../references/ios_setup.md                        |  249 [32m++[m
+ .../references/tts_generation.md                   |  676 [32m+++++[m
+ .../references/usage_patterns_android.md           |  242 [32m++[m
+ .../references/usage_patterns_web.md               |  274 [32m++[m
+ .../skills/firebase-app-hosting-basics/SKILL.md    |   81 [32m+[m
+ .../references/cli_commands.md                     |   85 [32m+[m
+ .../references/configuration.md                    |   59 [32m+[m
+ .../references/emulation.md                        |   59 [32m+[m
+ .agents/skills/firebase-auth-basics/SKILL.md       |  130 [32m+[m
+ .../references/client_sdk_android.md               |  197 [32m++[m
+ .../references/client_sdk_web.md                   |  301 [32m++[m
+ .../references/flutter_setup.md                    |  151 [32m+[m
+ .../firebase-auth-basics/references/ios_setup.md   |   87 [32m+[m
+ .../references/security_rules.md                   |   51 [32m+[m
+ .agents/skills/firebase-basics/SKILL.md            |  153 [32m+[m
+ .../firebase-basics/references/android_setup.md    |  247 [32m++[m
+ .../references/firebase-cli-guide.md               |   18 [32m+[m
+ .../references/firebase-service-init.md            |   20 [32m+[m
+ .../firebase-basics/references/flutter_setup.md    |  143 [32m+[m
+ .../skills/firebase-basics/references/ios_setup.md |  170 [32m++[m
+ .../firebase-basics/references/local-env-setup.md  |   80 [32m+[m
+ .../references/refresh/android_studio.md           |   41 [32m+[m
+ .../references/refresh/antigravity.md              |   64 [32m+[m
+ .../firebase-basics/references/refresh/claude.md   |   12 [32m+[m
+ .../references/refresh/gemini-cli.md               |   13 [32m+[m
+ .../references/refresh/other-agents.md             |   67 [32m+[m
+ .../references/setup/android_studio.md             |   23 [32m+[m
+ .../references/setup/antigravity.md                |   98 [32m+[m
+ .../references/setup/claude_code.md                |   45 [32m+[m
+ .../firebase-basics/references/setup/cursor.md     |   93 [32m+[m
+ .../firebase-basics/references/setup/gemini_cli.md |   53 [32m+[m
+ .../references/setup/github_copilot.md             |  104 [32m+[m
+ .../references/setup/other_agents.md               |   99 [32m+[m
+ .../skills/firebase-basics/references/web_setup.md |  129 [32m+[m
+ .agents/skills/firebase-crashlytics/SKILL.md       |   45 [32m+[m
+ .../references/android_setup.md                    |  183 [32m++[m
+ .../firebase-crashlytics/references/ios_setup.md   |  115 [32m+[m
+ .agents/skills/firebase-data-connect/SKILL.md      |  195 [32m++[m
+ .agents/skills/firebase-data-connect/examples.md   |  638 [32m++++[m
+ .../reference/cloud_functions.md                   |  184 [32m++[m
+ .../firebase-data-connect/reference/config.md      |  272 [32m++[m
+ .../reference/data_seeding.md                      |  185 [32m++[m
+ .../firebase-data-connect/reference/native_sql.md  |  170 [32m++[m
+ .../firebase-data-connect/reference/operations.md  |  385 [32m+++[m
+ .../firebase-data-connect/reference/realtime.md    |  212 [32m++[m
+ .../firebase-data-connect/reference/schema.md      |  290 [32m++[m
+ .../reference/sdk_admin_node.md                    |  141 [32m+[m
+ .../firebase-data-connect/reference/sdk_android.md |  181 [32m++[m
+ .../firebase-data-connect/reference/sdk_flutter.md |  134 [32m+[m
+ .../firebase-data-connect/reference/sdk_ios.md     |  157 [32m+[m
+ .../firebase-data-connect/reference/sdk_web.md     |  162 [32m++[m
+ .../firebase-data-connect/reference/search.md      |  264 [32m++[m
+ .../firebase-data-connect/reference/security.md    |  295 [32m++[m
+ .agents/skills/firebase-data-connect/templates.md  |  319 [32m++[m
+ .agents/skills/firebase-firestore/SKILL.md         |  108 [32m+[m
+ .../references/enterprise/android_sdk_usage.md     |  257 [32m++[m
+ .../references/enterprise/data_model.md            |   75 [32m+[m
+ .../references/enterprise/flutter_setup.md         |  180 [32m++[m
+ .../references/enterprise/indexes.md               |  134 [32m+[m
+ .../references/enterprise/ios_setup.md             |  189 [32m++[m
+ .../references/enterprise/provisioning.md          |  118 [32m+[m
+ .../references/enterprise/python_sdk_usage.md      |  142 [32m+[m
+ .../references/enterprise/web_sdk_usage.md         |  127 [32m+[m
+ .../references/standard/android_sdk_usage.md       |  229 [32m++[m
+ .../references/standard/flutter_setup.md           |  176 [32m++[m
+ .../references/standard/indexes.md                 |  112 [32m+[m
+ .../references/standard/ios_setup.md               |  174 [32m++[m
+ .../references/standard/provisioning.md            |  110 [32m+[m
+ .../references/standard/web_sdk_usage.md           |  192 [32m++[m
+ .agents/skills/firebase-hosting-basics/SKILL.md    |   68 [32m+[m
+ .../references/configuration.md                    |  115 [32m+[m
+ .../references/deploying.md                        |   48 [32m+[m
+ .../skills/firebase-remote-config-basics/SKILL.md  |  124 [32m+[m
+ .../references/android_setup.md                    |  110 [32m+[m
+ .../references/ios_setup.md                        |   83 [32m+[m
+ .../firebase-security-rules-auditor/SKILL.md       |   85 [32m+[m
+ .agents/skills/firestore-rules-creation/SKILL.md   |  600 [32m++++[m
+ .agents/skills/supabase-server/SKILL.md            |  481 [32m++++[m
+ .agents/skills/xcode-project-setup/SKILL.md        |  143 [32m+[m
+ .../scripts/xcode_spm_setup/.gitignore             |    9 [32m+[m
+ .../scripts/xcode_spm_setup/Package.resolved       |   41 [32m+[m
+ .../scripts/xcode_spm_setup/Package.swift          |   17 [32m+[m
+ .../scripts/xcode_spm_setup/Sources/main.swift     |  236 [32m++[m
+ .continue/skills/supabase-server/SKILL.md          |  481 [32m++++[m
+ BUILD_PREVIEW.bat                                  |   16 [31m-[m
+ CHECK_SETUP.bat                                    |   15 [31m-[m
+ README.md                                          |    2 [32m+[m[31m-[m
+ backend/app/api/catalog_bundles.py                 |  126 [32m+[m
+ backend/app/api/catalog_sources.py                 |    2 [32m+[m[31m-[m
+ backend/app/main.py                                |    4 [32m+[m[31m-[m
+ backend/app/services/catalog_normalize.py          |  139 [32m+[m[31m-[m
+ .../GlowNuture_500_Products_Website.csv            |  501 [32m++++[m
+ .../Shajgoj_BDT_Product_Price_Catalog.csv          |  228 [32m++[m
+ .../The_Ordinary_GlowNuture_BD_Catalog.xlsx        |  Bin [31m0[m -> [32m7348[m bytes
+ backend/requirements.lock                          |    2 [32m+[m
+ backend/requirements.txt                           |    1 [32m+[m
+ backend/tests/test_catalog_imports.py              |  166 [32m+[m[31m-[m
+ backend/tests/test_integrations.py                 |   13 [32m+[m[31m-[m
+ docs/IMAGE_DIAGNOSTICS.md                          |    8 [32m+[m[31m-[m
+ docs/INFRASTRUCTURE_START_HERE_BN.md               |    6 [32m+[m
+ docs/PRODUCT_API.md                                |   24 [32m+[m[31m-[m
+ docs/PRODUCT_APPROVAL_PLAYBOOK.md                  |    7 [32m+[m[31m-[m
+ frontend/INTEGRATION.md                            |   26 [32m+[m[31m-[m
+ frontend/assets/api-client.js                      |    4 [32m+[m[31m-[m
+ frontend/assets/app.css                            |   23 [32m+[m[31m-[m
+ frontend/assets/app.js                             | 1413 [32m++++[m[31m-----[m
+ frontend/assets/catalog-console.js                 |   33 [32m+[m[31m-[m
+ frontend/assets/commerce-ui.js                     |   58 [32m+[m[31m-[m
+ frontend/assets/commerce.css                       |   19 [32m+[m[31m-[m
+ frontend/assets/firebase-bridge.js                 |   28 [32m+[m[31m-[m
+ frontend/assets/glow-admin.js                      |    6 [32m+[m[31m-[m
+ frontend/assets/glow-motion.css                    |   10 [32m+[m[31m-[m
+ frontend/assets/glow-motion.js                     |   41 [32m+[m[31m-[m
+ ...h-pharmacy-products-you-can-order-on-amazon.jpg |  Bin [31m0[m -> [32m31561[m bytes
+ ...-beauty-products-to-shop-this-december-2025.jpg |  Bin [31m0[m -> [32m26366[m bytes
+ ...ating-peeling-solution-the-ordinary-sephora.jpg |  Bin [31m0[m -> [32m11565[m bytes
+ frontend/assets/image/amazon-com-clothing.jpg      |  Bin [31m0[m -> [32m22278[m bytes
+ ...-way-to-shop-for-k-beauty-if-youre-acne-pro.jpg |  Bin [31m0[m -> [32m9872[m bytes
+ ...fluido-spf50-plus-protector-solar-matifican.jpg |  Bin [31m0[m -> [32m49868[m bytes
+ .../anua-heartleaf-pore-control-cleansing-oil.jpg  |  Bin [31m0[m -> [32m20141[m bytes
+ .../anua-heartleaf-pore-deep-cleansing-foam.jpg    |  Bin [31m0[m -> [32m25260[m bytes
+ .../anua-heartleaf-quercetinol-pore-curated-on.jpg |  Bin [31m0[m -> [32m22570[m bytes
+ ...rum-dark-spot-care-30ml-hyaluronic-and-tran.jpg |  Bin [31m0[m -> [32m24538[m bytes
+ ...hyaluronic-acid-100-moisturising-cream-60ml.jpg |  Bin [31m0[m -> [32m15437[m bytes
+ ...each-70-niacin-serum-30ml-a-hydrating-serum.jpg |  Bin [31m0[m -> [32m24607[m bytes
+ ...tor-make-up-cosmetic-poster-facial-cleanser.jpg |  Bin [31m0[m -> [32m13691[m bytes
+ ...seon-calming-serum-green-tea-plus-panthenol.jpg |  Bin [31m0[m -> [32m32410[m bytes
+ ...eauty-of-joseon-glow-replenishing-rice-milk.jpg |  Bin [31m0[m -> [32m13861[m bytes
+ ...auty-of-joseon-glow-skin-duo-gifts-and-sets.jpg |  Bin [31m0[m -> [32m33206[m bytes
+ .../image/beauty-of-joseon-matte-sun-stick.jpg     |  Bin [31m0[m -> [32m42965[m bytes
+ .../beauty-of-joseon-red-bean-water-gel-100ml.jpg  |  Bin [31m0[m -> [32m11220[m bytes
+ ...n-spf50-plus-rice-plus-probiotics-sunscreen.jpg |  Bin [31m0[m -> [32m49549[m bytes
+ ...oseon-shop-hanbang-korean-skincare-products.jpg |  Bin [31m0[m -> [32m31678[m bytes
+ ...on-tint-570-worth-it-medium-loreal-paris-cl.jpg |  Bin [31m0[m -> [32m23096[m bytes
+ ...ng-lotion-spf50-for-normal-to-dry-skin-52ml.jpg |  Bin [31m0[m -> [32m44163[m bytes
+ .../image/cerave-body-wash-with-salicylic-acid.jpg |  Bin [31m0[m -> [32m36059[m bytes
+ .../image/cerave-foaming-facial-cleanser.jpg       |  Bin [31m0[m -> [32m20219[m bytes
+ ...l-cream-face-for-oily-skin-with-ceramides-3.jpg |  Bin [31m0[m -> [32m60831[m bytes
+ ...ing-cream-19-oz-face-and-body-dry-skin-care.jpg |  Bin [31m0[m -> [32m71024[m bytes
+ .../image/cerave-pm-facial-moisturizing-lotion.jpg |  Bin [31m0[m -> [32m30472[m bytes
+ ...-prone-and-oily-skin-simple-steps-that-work.jpg |  Bin [31m0[m -> [32m23169[m bytes
+ frontend/assets/image/cicaplast-baume-5-plus.jpg   |  Bin [31m0[m -> [32m49463[m bytes
+ ...cosrx-advanced-snail-96-mucin-power-essence.jpg |  Bin [31m0[m -> [32m24563[m bytes
+ .../image/cosrx-bha-blackhead-power-liquid.jpg     |  Bin [31m0[m -> [32m30520[m bytes
+ .../cosrx-low-ph-good-morning-gel-cleanser-1.jpg   |  Bin [31m0[m -> [32m23042[m bytes
+ .../cosrx-low-ph-good-morning-gel-cleanser.jpg     |  Bin [31m0[m -> [32m23042[m bytes
+ ...rx-snail-92-cream-for-hydrated-glowing-skin.jpg |  Bin [31m0[m -> [32m37724[m bytes
+ ...osrx-the-niacinamide-15-20-ml-150-00-100-ml.jpg |  Bin [31m0[m -> [32m42141[m bytes
+ .../cosrx-the-vitamin-c-23-serum-nordstrom-1.jpg   |  Bin [31m0[m -> [32m43243[m bytes
+ .../cosrx-the-vitamin-c-23-serum-nordstrom-2.jpg   |  Bin [31m0[m -> [32m43243[m bytes
+ .../cosrx-the-vitamin-c-23-serum-nordstrom.jpg     |  Bin [31m0[m -> [32m43243[m bytes
+ ...sunscreen-lotion-for-acne-prone-skin-spf-50.jpg |  Bin [31m0[m -> [32m33895[m bytes
+ .../image/gamechanger-for-uneven-skin-tone.jpg     |  Bin [31m0[m -> [32m48245[m bytes
+ .../assets/image/ginseng-cleansing-oil-210ml.jpg   |  Bin [31m0[m -> [32m16390[m bytes
+ frontend/assets/image/glownuture_morning.webp      |  Bin [31m0[m -> [32m86358[m bytes
+ frontend/assets/image/glownuture_night.webp        |  Bin [31m0[m -> [32m94392[m bytes
+ .../assets/image/golden-serum-dropper-bottle.jpg   |  Bin [31m0[m -> [32m14763[m bytes
+ frontend/assets/image/grippy-serum-primer.jpg      |  Bin [31m0[m -> [32m33521[m bytes
+ ...-body-lotion-gel-cream-with-hyaluronic-acid.jpg |  Bin [31m0[m -> [32m29581[m bytes
+ ...boost-water-gel-sunscreen-lotion-neutrogena.jpg |  Bin [31m0[m -> [32m35135[m bytes
+ ...-blemish-control-gel-40-ml-fra-cerave-matas.jpg |  Bin [31m0[m -> [32m27119[m bytes
+ frontend/assets/image/k-beauty-hunters-gently.jpg  |  Bin [31m0[m -> [32m18975[m bytes
+ .../la-roche-posay-12-vitamin-c-face-serum.jpg     |  Bin [31m0[m -> [32m36443[m bytes
+ ...ay-anthelios-60-melt-in-body-milk-sunscreen.jpg |  Bin [31m0[m -> [32m29875[m bytes
+ ...roche-posay-anthelios-invisible-fluid-spf50.jpg |  Bin [31m0[m -> [32m25749[m bytes
+ ...ios-uvmune-400-tinted-fluid-spf50-plus-50ml.jpg |  Bin [31m0[m -> [32m45759[m bytes
+ .../image/la-roche-posay-cicaplast-b5-serum.jpg    |  Bin [31m0[m -> [32m14119[m bytes
+ ...el-cleanser-for-oily-sensitive-and-acne-pro.jpg |  Bin [31m0[m -> [32m55286[m bytes
+ ...osay-effaclar-ultra-concentrated-serum-50ml.jpg |  Bin [31m0[m -> [32m25025[m bytes
+ ...hydraphase-ha-bb-cream-spf15-kopen-nu-24-45.jpg |  Bin [31m0[m -> [32m7815[m bytes
+ ...a-roche-posay-lipikar-ap-plus-triple-repair.jpg |  Bin [31m0[m -> [32m51955[m bytes
+ ...-repair-moisturizer-48h-skin-barrier-repair.jpg |  Bin [31m0[m -> [32m73711[m bytes
+ ...ure-72hr-moisture-sealing-conditioner-frizz.jpg |  Bin [31m0[m -> [32m40830[m bytes
+ ...ble-32hr-freshwear-liquid-foundation-in-100.jpg |  Bin [31m0[m -> [32m33102[m bytes
+ ...paris-productos-tendencias-belleza-pasarela.jpg |  Bin [31m0[m -> [32m43045[m bytes
+ ...true-match-foundation-foundation-rose-beige.jpg |  Bin [31m0[m -> [32m33656[m bytes
+ ...tch-radiant-serum-concealer-2r-light-medium.jpg |  Bin [31m0[m -> [32m33369[m bytes
+ ...-lashes-panorama-mascara-black-loreal-paris.jpg |  Bin [31m0[m -> [32m81227[m bytes
+ ...ella-tone-brightening-capsule-ampoule-100ml.jpg |  Bin [31m0[m -> [32m20486[m bytes
+ ...-lash-sensational-sky-high-mascara-very-bla.jpg |  Bin [31m0[m -> [32m31232[m bytes
+ ...ay-lumi-matte-foundation-96-4027-14-dkk-1-l.jpg |  Bin [31m0[m -> [32m41510[m bytes
+ ...er-stay-lumi-matte-foundation-foundation-98.jpg |  Bin [31m0[m -> [32m34196[m bytes
+ ...per-stay-matte-ink-pomadka-w-p-ynie-soloist.jpg |  Bin [31m0[m -> [32m29773[m bytes
+ ...ddy-tint-liquid-lipstick-90-ribbon-tied-5-m.jpg |  Bin [31m0[m -> [32m38939[m bytes
+ ...te-ink-65-seductress-langhoudende-nude-liqu.jpg |  Bin [31m0[m -> [32m27778[m bytes
+ .../naturals-glow-and-radiance-face-cream.jpg      |  Bin [31m0[m -> [32m74079[m bytes
+ .../neutrogena-hydro-boost-cleanser-water-gel.jpg  |  Bin [31m0[m -> [32m34575[m bytes
+ ...oost-fragrance-free-gel-cleanser-200ml-asos.jpg |  Bin [31m0[m -> [32m35397[m bytes
+ ...ogena-hydro-boost-gel-cream-with-hyaluronic.jpg |  Bin [31m0[m -> [32m37712[m bytes
+ .../image/neutrogena-hydro-boost-water-gel.jpg     |  Bin [31m0[m -> [32m27815[m bytes
+ ...eutrogena-pink-grapefruit-face-wash-just-82.jpg |  Bin [31m0[m -> [32m29838[m bytes
+ .../assets/image/nullthe-most-loved-collection.jpg |  Bin [31m0[m -> [32m38682[m bytes
+ frontend/assets/image/ordinary-glycolic-acid.jpg   |  Bin [31m0[m -> [32m30860[m bytes
+ ...centrado-mela-b3-la-roche-posay-antimanchas.jpg |  Bin [31m0[m -> [32m30351[m bytes
+ .../image/shop-your-cosrx-skincare-product.jpg     |  Bin [31m0[m -> [32m17921[m bytes
+ frontend/assets/image/skin-care-routine.jpg        |  Bin [31m0[m -> [32m32371[m bytes
+ ...r-centella-tone-brightening-capsule-ampoule.jpg |  Bin [31m0[m -> [32m26146[m bytes
+ .../skin1004-centella-hyalu-cica-first-ampoule.jpg |  Bin [31m0[m -> [32m21397[m bytes
+ ...04-madagascar-centella-ampoule-available-at.jpg |  Bin [31m0[m -> [32m40728[m bytes
+ ...ule-soothing-korean-serum-for-sensitive-ski.jpg |  Bin [31m0[m -> [32m22029[m bytes
+ ...ng-glow-mascarilla-facial-iluminadora-100ml.jpg |  Bin [31m0[m -> [32m8265[m bytes
+ frontend/assets/image/skin1004-sun-serum.jpg       |  Bin [31m0[m -> [32m12967[m bytes
+ ...ogena-pour-une-peau-belle-et-en-bonne-sante.jpg |  Bin [31m0[m -> [32m45338[m bytes
+ ...ruggling-to-navigate-the-confusing-world-of.jpg |  Bin [31m0[m -> [32m33409[m bytes
+ ...fordable-skincare-brands-that-actually-work.jpg |  Bin [31m0[m -> [32m37161[m bytes
+ .../assets/image/the-6-peptide-skin-booster.jpg    |  Bin [31m0[m -> [32m6151[m bytes
+ .../the-niacinamide-15-serum-cosrx-pibukare.jpg    |  Bin [31m0[m -> [32m30041[m bytes
+ .../image/the-ordinary-body-care-collection.jpg    |  Bin [31m0[m -> [32m43040[m bytes
+ .../the-ordinary-niacinamide-10-plus-zinc-1.jpg    |  Bin [31m0[m -> [32m22702[m bytes
+ .../assets/image/the-ordinary-skin-care-pack.jpg   |  Bin [31m0[m -> [32m24806[m bytes
+ frontend/assets/image/the-ordinary.jpg             |  Bin [31m0[m -> [32m56511[m bytes
+ .../thirsty-skin-quench-it-instantly-like-a.jpg    |  Bin [31m0[m -> [32m24910[m bytes
+ ...-ive-idd-the-10-best-korean-skincare-brands.jpg |  Bin [31m0[m -> [32m32779[m bytes
+ frontend/assets/image/vince-vitamin-c-serum.jpg    |  Bin [31m0[m -> [32m44006[m bytes
+ ...-moisturiser-is-a-game-changer-for-dry-skin.jpg |  Bin [31m0[m -> [32m58075[m bytes
+ ...-everyone-is-obsessed-with-snail-96-essence.jpg |  Bin [31m0[m -> [32m18703[m bytes
+ frontend/assets/local-catalog.js                   | 3039 [32m++++++++++++++++++++[m
+ frontend/assets/media-paths.js                     |   18 [32m+[m
+ frontend/assets/videos/beauty-motion-graphic.mp4   |  Bin [31m0[m -> [32m2128912[m bytes
+ .../assets/videos/lakme-vitamin-c-facewash.mp4     |  Bin [31m0[m -> [32m5497013[m bytes
+ frontend/assets/videos/lars-skincare.mp4           |  Bin [31m0[m -> [32m5645286[m bytes
+ frontend/assets/videos/skincare-commercial.mp4     |  Bin [31m0[m -> [32m4431126[m bytes
+ frontend/catalog/index.html                        |   99 [32m+[m[31m-[m
+ frontend/index.html                                |   11 [32m+[m[31m-[m
+ ogerio_csv_scraper/ogerio_scraper/README_BN.md     |   42 [32m+[m
+ .../ogerio_scraper/ogerio_sample.csv               |   11 [32m+[m
+ .../ogerio_scraper/ogerio_scraper.py               |  467 [32m+++[m
+ ogerio_csv_scraper/ogerio_scraper/requirements.txt |    2 [32m+[m
+ ogerio_csv_scraper/ogerio_scraper/test_scraper.py  |   43 [32m+[m
+ package-lock.json                                  | 1259 [32m++++++++[m
+ package.json                                       |    7 [32m+[m[31m-[m
+ public/404.html                                    |   33 [32m+[m
+ public/index.html                                  |   89 [32m+[m
+ run-local.bat                                      |   19 [31m-[m
+ scripts/build_firebase_preview.py                  |    2 [32m+[m[31m-[m
+ scripts/build_local_catalog.cjs                    |  236 [32m++[m
+ scripts/run_local.py                               |   12 [32m+[m[31m-[m
+ skills-lock.json                                   |   89 [32m+[m
+ tests/frontend.test.cjs                            |  149 [32m+[m[31m-[m
+ tests/local-catalog.test.cjs                       |  380 [32m+++[m
+ 246 files changed, 22684 insertions(+), 970 deletions(-)
