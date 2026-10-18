@@ -19,7 +19,8 @@
     return value;
   }
   function imageFor(item) {
-    const wrapper = el("div", "photo");
+    const wrapper = el("button", "photo");
+    wrapper.type = "button";
     const img = document.createElement("img");
     img.loading = "lazy";
     img.decoding = "async";
@@ -76,7 +77,7 @@
     dialog.showModal();
   }
   function card(item) {
-    const article = el("article", "product"), photo = imageFor(item);
+    const article = el("article", "product"), pictureButton = imageFor(item);
     const copy = el("div", "copy");
     const micro = el("div", "micro", item.brand);
     const title = el("h3", "", item.name);
@@ -85,11 +86,7 @@
     const view = el("button", "view", "View product details ↗");
     view.type = "button";
     view.addEventListener("click", () => detail(item));
-    const pictureButton = el("button", "photo");
-    pictureButton.type = "button";
     pictureButton.setAttribute("aria-label", "View " + item.name);
-    // Reuse the photo's accessible image and fallback without duplicate controls.
-    pictureButton.replaceChildren(...Array.from(photo.childNodes));
     pictureButton.addEventListener("click", () => detail(item));
     copy.append(micro, title, meta, price, view);
     article.append(pictureButton, copy);
