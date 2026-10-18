@@ -22,7 +22,7 @@ PREVIEW_BANNER = (
     'style="position:relative;z-index:99999;background:#221F1C;color:#fff;'
     'padding:12px 16px;text-align:center;font:600 14px/1.5 sans-serif">'
     'GlowNuture PREVIEW ONLY — products, sign-in, orders and checkout require the live backend. '
-    'No purchases can be completed from this static preview.</div>'
+    'No purchases can be completed here. <a href="/collection/" style="color:#f4efdc;text-decoration:underline;margin-left:12px">Explore reviewed product collection →</a></div>'
 )
 
 
