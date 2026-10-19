@@ -1,89 +1,1795 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Firebase Control Center</title>
+<meta name="description" content="An extended Firebase dashboard: auth, firestore, realtime db, storage, functions, remote config and analytics.">
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/13.0.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/13.0.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/13.0.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+<!-- ============ Firebase SDKs (compat build) ============ -->
+<script defer src="/__/firebase/13.0.0/firebase-app-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-auth-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-database-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-firestore-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-functions-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-messaging-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-storage-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-analytics-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-remote-config-compat.js"></script>
+<script defer src="/__/firebase/13.0.0/firebase-performance-compat.js"></script>
+<script defer src="/__/firebase/init.js?useEmulator=false"></script>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+<style>
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a0f1e;
+  --bg-soft:#0f1730;
+  --panel:#121b35;
+  --panel-2:#17213f;
+  --panel-3:#1d2950;
+  --border:#25325a;
+  --border-soft:#1c2748;
+  --text:#e9eefb;
+  --muted:#8b9ac4;
+  --muted-2:#63719b;
+  --accent:#6d8cff;
+  --accent-soft:rgba(109,140,255,.16);
+  --amber:#ffa100;
+  --ok:#2ecc9b;
+  --warn:#f6c445;
+  --err:#ff5c7a;
+  --radius:14px;
+  --radius-sm:10px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+
+html[data-theme="light"]{
+  --bg:#eef2fb;
+  --bg-soft:#e6ecf9;
+  --panel:#ffffff;
+  --panel-2:#f6f8ff;
+  --panel-3:#eaf0ff;
+  --border:#d7e0f2;
+  --border-soft:#e4eaf7;
+  --text:#0f1730;
+  --muted:#5c6a8c;
+  --muted-2:#8592b0;
+  --accent:#3b62f6;
+  --accent-soft:rgba(59,98,246,.12);
+  --shadow:0 10px 26px rgba(20,35,80,.10);
+}
+
+/* ============================================================
+   2. BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:
+    radial-gradient(900px 500px at 82% -10%, rgba(109,140,255,.16), transparent 60%),
+    radial-gradient(700px 420px at 8% 110%, rgba(255,161,0,.10), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  font-size:14px;
+  line-height:1.5;
+}
+h1,h2,h3{margin:0;font-weight:650;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit}
+input,textarea,select{font:inherit;color:inherit}
+::selection{background:var(--accent-soft)}
+
+/* scrollbars */
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-thumb{background:var(--border);border-radius:20px;border:2px solid transparent;background-clip:content-box}
+*::-webkit-scrollbar-thumb:hover{background:var(--panel-3);background-clip:content-box}
+*::-webkit-scrollbar-track{background:transparent}
+
+/* ============================================================
+   3. SHELL / LAYOUT
+   ============================================================ */
+.app{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}
+
+.sidebar{
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;gap:16px;
+  padding:18px 14px;
+  background:linear-gradient(180deg,var(--panel),var(--bg-soft));
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  z-index:40;
+}
+
+.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 10px}
+.brand-logo{
+  width:40px;height:40px;flex:0 0 40px;
+  display:grid;place-items:center;font-size:20px;
+  border-radius:12px;
+  background:linear-gradient(145deg,var(--amber),#ff6b00);
+  box-shadow:0 6px 18px rgba(255,120,0,.35);
+}
+.brand strong{display:block;font-size:15px;letter-spacing:-.01em}
+.brand span{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav-label{
+  font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted-2);padding:12px 10px 6px;font-weight:600;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:9px 11px;border:0;border-radius:10px;
+  background:transparent;color:var(--muted);
+  cursor:pointer;text-align:left;font-size:13.5px;font-weight:500;
+  transition:background .15s,color .15s,transform .1s;
+}
+.nav-item i{font-style:normal;width:18px;text-align:center;opacity:.9}
+.nav-item:hover{background:var(--panel-2);color:var(--text)}
+.nav-item:active{transform:scale(.985)}
+.nav-item.active{
+  background:linear-gradient(90deg,var(--accent-soft),transparent);
+  color:var(--text);
+  box-shadow:inset 2px 0 0 var(--accent);
+}
+
+.sidebar-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid var(--border-soft)}
+.conn{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--muted);
+  padding:8px 10px;border-radius:10px;background:var(--panel-2);
+}
+.conn i{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 4px rgba(246,196,69,.15);flex:0 0 8px}
+.conn.online i{background:var(--ok);box-shadow:0 0 0 4px rgba(46,204,155,.15)}
+.conn.offline i{background:var(--err);box-shadow:0 0 0 4px rgba(255,92,122,.15)}
+
+/* ============================================================
+   4. MAIN / TOPBAR
+   ============================================================ */
+.main{min-width:0;display:flex;flex-direction:column}
+
+.topbar{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;gap:14px;
+  padding:16px 26px;
+  background:color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border-soft);
+}
+.topbar h1{font-size:18px}
+.topbar p{font-size:12.5px;color:var(--muted);margin-top:1px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+
+.user-chip{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 12px;border-radius:999px;
+  background:var(--panel-2);border:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);max-width:260px;
+}
+.user-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--muted-2);flex:0 0 8px}
+.user-chip.on .dot{background:var(--ok)}
+.user-chip span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.icon-btn{
+  display:none;place-items:center;
+  width:38px;height:38px;border-radius:10px;
+  background:var(--panel-2);border:1px solid var(--border);
+  cursor:pointer;font-size:16px;
+}
+
+.content{padding:22px 26px 70px;display:flex;flex-direction:column;gap:18px}
+
+/* ============================================================
+   5. VIEWS
+   ============================================================ */
+.view{display:none;flex-direction:column;gap:18px;animation:fadeUp .28s ease both}
+.view.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ============================================================
+   6. CARDS / GRID
+   ============================================================ */
+.grid{display:grid;gap:14px}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.grid.four{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+  min-width:0;
+}
+.card-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.card-head h2{font-size:14px;letter-spacing:.01em}
+.card-head .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+
+.stat{display:flex;flex-direction:column;gap:6px;padding:16px 18px}
+.stat-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+.stat strong{font-size:20px;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stat small{color:var(--muted);font-size:12px}
+
+/* ============================================================
+   7. CONTROLS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:9px 15px;border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--panel-3);color:var(--text);
+  cursor:pointer;font-size:13px;font-weight:550;
+  transition:filter .15s,transform .1s,background .15s;
+  white-space:nowrap;
+}
+.btn:hover{filter:brightness(1.12)}
+.btn:active{transform:scale(.975)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;filter:none}
+.btn.primary{
+  background:linear-gradient(145deg,var(--accent),#4a6cf0);
+  border-color:transparent;color:#fff;
+  box-shadow:0 6px 18px rgba(109,140,255,.28);
+}
+.btn.ghost{background:transparent}
+.btn.sm{padding:5px 11px;font-size:12px;border-radius:8px}
+.btn.danger{background:transparent;border-color:rgba(255,92,122,.5);color:var(--err)}
+
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row > input[type="text"], .row > input[type="email"], .row > input[type="password"], .row > input:not([type]){
+  flex:1 1 200px;min-width:0;
+}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field > span{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+
+input[type="text"],input[type="email"],input[type="password"],input[type="file"],textarea,select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--bg-soft);
+  color:var(--text);
+  outline:none;
+  font-size:13.5px;
+  transition:border-color .15s,box-shadow .15s;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+input::placeholder,textarea::placeholder{color:var(--muted-2)}
+textarea{resize:vertical;font-family:var(--mono);font-size:12.5px;line-height:1.55}
+
+.hint{font-size:12px;color:var(--muted-2);margin-top:10px;line-height:1.55}
+
+/* ============================================================
+   8. CHIPS / PILLS / KV
+   ============================================================ */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;
+  border:1px solid var(--border);background:var(--panel-3);color:var(--muted);
+}
+.chip.on{color:var(--ok);border-color:rgba(46,204,155,.4);background:rgba(46,204,155,.10)}
+.chip.off{color:var(--muted-2);opacity:.6}
+
+.pill{
+  padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;
+  background:var(--accent-soft);color:var(--accent);
+  border:1px solid rgba(109,140,255,.25);
+}
+
+.kv{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.kv li{
+  display:flex;gap:12px;justify-content:space-between;align-items:baseline;
+  padding:8px 0;border-bottom:1px dashed var(--border-soft);
+  font-size:13px;
+}
+.kv li:last-child{border-bottom:0}
+.kv .k{color:var(--muted-2);flex:0 0 auto;font-size:12px;letter-spacing:.02em}
+.kv .v{color:var(--text);text-align:right;word-break:break-all;font-family:var(--mono);font-size:12px}
+
+/* ============================================================
+   9. LISTS
+   ============================================================ */
+.list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;padding-right:4px}
+.list-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 13px;border-radius:11px;
+  background:var(--panel-2);border:1px solid var(--border-soft);
+  animation:fadeUp .2s ease both;
+}
+.list-item:hover{border-color:var(--border)}
+.list-item .body{min-width:0;flex:1}
+.list-item .t{font-size:13px;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-item .s{font-size:11.5px;color:var(--muted-2);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-item .actions{display:flex;gap:6px;flex:0 0 auto}
+.empty{
+  padding:26px 14px;text-align:center;color:var(--muted-2);font-size:13px;
+  border:1px dashed var(--border);border-radius:11px;background:var(--panel-2);
+}
+
+/* ============================================================
+   10. CONSOLE
+   ============================================================ */
+.console{
+  font-family:var(--mono);
+  font-size:12px;line-height:1.65;
+  background:#070c18;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px 14px;
+  height:230px;
+  overflow-y:auto;
+  color:#b9c6e4;
+}
+html[data-theme="light"] .console{background:#0f1730;color:#cfd9f2}
+.console .l{display:flex;gap:10px;padding:1px 0;white-space:pre-wrap;word-break:break-word}
+.console .l .ts{color:#546189;flex:0 0 auto}
+.console .l.error{color:#ff8fa3}
+.console .l.warn{color:#ffd166}
+.console .l.ok{color:#5ce0b5}
+.console .l.info{color:#8fb0ff}
+
+.out{
+  margin:0;padding:14px;border-radius:11px;
+  background:var(--bg-soft);border:1px solid var(--border);
+  font-family:var(--mono);font-size:12.5px;line-height:1.6;
+  max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-word;
+  color:var(--muted);
+}
+
+/* ============================================================
+   11. PROGRESS
+   ============================================================ */
+.progress{
+  height:7px;border-radius:99px;background:var(--panel-3);
+  overflow:hidden;margin-top:12px;border:1px solid var(--border-soft);
+}
+.progress .bar{
+  height:100%;width:0%;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent),var(--amber));
+  transition:width .25s ease;
+}
+
+/* ============================================================
+   12. TOASTS
+   ============================================================ */
+#toasts{
+  position:fixed;right:20px;bottom:20px;z-index:9999;
+  display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+  pointer-events:none;
+}
+.toast{
+  pointer-events:auto;
+  padding:11px 16px;border-radius:11px;
+  background:var(--panel-3);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  font-size:13px;max-width:340px;
+  animation:toastIn .25s cubic-bezier(.2,.9,.3,1.3) both;
+}
+.toast.ok{border-color:rgba(46,204,155,.45);color:var(--ok)}
+.toast.err{border-color:rgba(255,92,122,.45);color:var(--err)}
+.toast.warn{border-color:rgba(246,196,69,.45);color:var(--warn)}
+.toast.out{animation:toastOut .25s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(24px)}}
+
+/* ============================================================
+   13. RESPONSIVE
+   ============================================================ */
+@media (max-width:1000px){
+  .app{grid-template-columns:1fr}
+  .sidebar{
+    position:fixed;inset:0 auto 0 0;width:270px;
+    transform:translateX(-102%);
+    transition:transform .26s cubic-bezier(.4,0,.2,1);
+    box-shadow:0 0 60px rgba(0,0,0,.6);
+  }
+  .sidebar.open{transform:none}
+  .icon-btn{display:grid}
+  .content{padding:18px 16px 70px}
+  .topbar{padding:14px 16px}
+  #toasts{left:16px;right:16px;align-items:stretch}
+  .toast{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-logo">🔥</div>
+      <div>
+        <strong>Firebase</strong>
+        <span>Control Center</span>
+      </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+    <nav class="nav">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item active" data-view="dashboard"><i>◈</i> Dashboard</button>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
+      <div class="nav-label">Data</div>
+      <button class="nav-item" data-view="auth"><i>👤</i> Authentication</button>
+      <button class="nav-item" data-view="firestore"><i>🗂</i> Firestore</button>
+      <button class="nav-item" data-view="database"><i>🌐</i> Realtime DB</button>
+      <button class="nav-item" data-view="storage"><i>📦</i> Storage</button>
+
+      <div class="nav-label">Cloud</div>
+      <button class="nav-item" data-view="functions"><i>⚡</i> Functions</button>
+      <button class="nav-item" data-view="config"><i>⚙</i> Config &amp; Cloud</button>
+
+      <div class="nav-label">System</div>
+      <button class="nav-item" data-view="settings"><i>🛠</i> Settings</button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="conn" id="connBadge"><i></i><span id="connText">Connecting…</span></div>
+      <button class="btn ghost sm" id="themeBtn">🌗 Toggle theme</button>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN ==================== -->
+  <main class="main">
+
+    <header class="topbar">
+      <button class="icon-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+      <div>
+        <h1 id="viewTitle">Dashboard</h1>
+        <p id="viewSub">Overview of your Firebase project</p>
+      </div>
+      <div class="topbar-right">
+        <div class="user-chip" id="userChip"><span class="dot"></span><span class="t">Signed out</span></div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ---------- DASHBOARD ---------- -->
+      <section class="view active" id="view-dashboard">
+        <div class="grid four">
+          <div class="card stat">
+            <span class="stat-label">Project</span>
+            <strong id="statProject">—</strong>
+            <small id="statProjectId">not initialised</small>
+          </div>
+          <div class="card stat">
+            <span class="stat-label">Current user</span>
+            <strong id="statUser">Signed out</strong>
+            <small id="statProvider">no provider</small>
+          </div>
+          <div class="card stat">
+            <span class="stat-label">SDK modules</span>
+            <strong id="statModules">0</strong>
+            <small id="statModulesSub">of 9 detected</small>
+          </div>
+          <div class="card stat">
+            <span class="stat-label">Session uptime</span>
+            <strong id="statUptime">00:00</strong>
+            <small>since page load</small>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <div class="card-head">
+              <h2>SDK Modules</h2>
+              <div class="right"><span class="pill" id="featureCount">0/9</span></div>
+            </div>
+            <div class="chips" id="featureChips"></div>
+            <p class="hint">
+              Modules are detected from the loaded compat bundle. Anything greyed out
+              means the SDK file was not loaded or the feature is unavailable.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Environment</h2></div>
+            <ul class="kv" id="envInfo">
+              <li><span class="k">Status</span><span class="v">booting…</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Console</h2>
+            <div class="right">
+              <button class="btn ghost sm" id="clearLogs">Clear</button>
+            </div>
+          </div>
+          <div class="console" id="consoleLog"></div>
+        </div>
+      </section>
+
+      <!-- ---------- AUTH ---------- -->
+      <section class="view" id="view-auth">
+        <div class="grid two">
+          <div class="card">
+            <div class="card-head"><h2>Sign in</h2></div>
+
+            <label class="field">
+              <span>Email</span>
+              <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+            </label>
+            <label class="field">
+              <span>Password</span>
+              <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password">
+            </label>
+
+            <div class="row">
+              <button class="btn primary" id="btnSignIn">Sign in</button>
+              <button class="btn" id="btnSignUp">Create account</button>
+              <button class="btn ghost" id="btnAnon">Anonymous</button>
+            </div>
+
+            <p class="hint">
+              Email/password requires the provider to be enabled in the Firebase console.
+              Anonymous sign-in works out of the box once it is enabled.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h2>Current session</h2>
+              <div class="right"><button class="btn ghost sm" id="btnSignOut">Sign out</button></div>
+            </div>
+            <ul class="kv" id="userInfo">
+              <li><span class="k">State</span><span class="v">signed out</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Password reset</h2></div>
+          <div class="row">
+            <input type="email" id="resetEmail" placeholder="you@example.com">
+            <button class="btn" id="btnReset">Send reset email</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- FIRESTORE ---------- -->
+      <section class="view" id="view-firestore">
+        <div class="card">
+          <div class="card-head"><h2>Collection</h2></div>
+          <div class="row" style="margin-bottom:10px">
+            <input type="text" id="fsCollection" value="notes" placeholder="collection name">
+            <button class="btn" id="fsListen">Listen</button>
+            <button class="btn ghost" id="fsStop">Stop</button>
+          </div>
+          <div class="row">
+            <input type="text" id="fsText" placeholder="Document text (field: text)">
+            <button class="btn primary" id="fsAdd">Add document</button>
+          </div>
+          <p class="hint">
+            Documents are written with <code>{ text, createdAt: serverTimestamp() }</code>.
+            Make sure your Firestore rules allow the current user to read/write.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Live documents</h2>
+            <div class="right"><span class="pill" id="fsCount">0</span></div>
+          </div>
+          <div class="list" id="fsList"></div>
+        </div>
+      </section>
+
+      <!-- ---------- REALTIME DB ---------- -->
+      <section class="view" id="view-database">
+        <div class="card">
+          <div class="card-head"><h2>Realtime Database</h2></div>
+          <div class="row" style="margin-bottom:10px">
+            <input type="text" id="dbPath" value="messages" placeholder="path, e.g. messages">
+            <button class="btn" id="dbListen">Listen</button>
+            <button class="btn ghost" id="dbStop">Stop</button>
+          </div>
+          <div class="row">
+            <input type="text" id="dbValue" placeholder="Message text">
+            <button class="btn primary" id="dbPush">Push</button>
+          </div>
+          <p class="hint">
+            Values are pushed with <code>ref(path).push()</code> and streamed with
+            <code>on('value')</code>. Requires a Realtime Database instance in your project.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Live values</h2>
+            <div class="right"><span class="pill" id="dbCount">0</span></div>
+          </div>
+          <div class="list" id="dbList"></div>
+        </div>
+      </section>
+
+      <!-- ---------- STORAGE ---------- -->
+      <section class="view" id="view-storage">
+        <div class="card">
+          <div class="card-head"><h2>Upload</h2></div>
+          <div class="row">
+            <input type="file" id="stFile">
+            <button class="btn primary" id="stUpload">Upload</button>
+            <button class="btn ghost" id="stRefresh">Refresh list</button>
+          </div>
+          <div class="progress"><div class="bar" id="stBar"></div></div>
+          <p class="hint">
+            Files are uploaded to <code>uploads/&lt;timestamp&gt;_&lt;name&gt;</code>.
+            A download URL is generated after the upload completes.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Files in /uploads</h2>
+            <div class="right"><span class="pill" id="stCount">0</span></div>
+          </div>
+          <div class="list" id="stList"></div>
+        </div>
+      </section>
+
+      <!-- ---------- FUNCTIONS ---------- -->
+      <section class="view" id="view-functions">
+        <div class="card">
+          <div class="card-head"><h2>Callable function</h2></div>
+
+          <label class="field">
+            <span>Function name</span>
+            <input type="text" id="fnName" value="helloWorld" placeholder="helloWorld">
+          </label>
+
+          <label class="field">
+            <span>Payload (JSON)</span>
+            <textarea id="fnData" rows="6">{ "name": "Firebase" }</textarea>
+          </label>
+
+          <div class="row">
+            <button class="btn primary" id="fnCall">Invoke</button>
+            <button class="btn ghost" id="fnClear">Clear output</button>
+          </div>
+
+          <p class="hint">
+            Calls <code>firebase.functions().httpsCallable(name)(data)</code>.
+            Deploy a callable function first, or switch <code>useEmulator</code> on.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Result</h2></div>
+          <pre class="out" id="fnOut">// result appears here</pre>
+        </div>
+      </section>
+
+      <!-- ---------- CONFIG & CLOUD ---------- -->
+      <section class="view" id="view-config">
+        <div class="grid two">
+
+          <div class="card">
+            <div class="card-head"><h2>Remote Config</h2></div>
+            <div class="row">
+              <button class="btn primary" id="rcFetch">Fetch &amp; activate</button>
+              <button class="btn ghost" id="rcDefaults">Reset defaults</button>
+            </div>
+            <ul class="kv" id="rcList" style="margin-top:14px">
+              <li><span class="k">Status</span><span class="v">not fetched</span></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Cloud Messaging</h2></div>
+            <div class="row">
+              <button class="btn primary" id="msgToken">Get token</button>
+              <button class="btn ghost" id="msgPermission">Request permission</button>
+            </div>
+            <p class="hint">
+              Requires a <code>firebase-messaging-sw.js</code> service worker at the site root
+              and a VAPID key configured in the console.
+            </p>
+            <pre class="out" id="msgOut">// token appears here</pre>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Analytics</h2></div>
+            <div class="row">
+              <input type="text" id="anEvent" value="tutorial_completed" placeholder="event name">
+              <button class="btn primary" id="anLog">Log event</button>
+            </div>
+            <p class="hint">Events are batched by the SDK and visible in the DebugView / Realtime dashboard.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Performance</h2></div>
+            <div class="row">
+              <button class="btn primary" id="perfTrace">Run sample trace</button>
+            </div>
+            <p class="hint">Creates a custom trace, simulates work, and stops it — then reports to Performance Monitoring.</p>
+            <pre class="out" id="perfOut">// trace results appear here</pre>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ---------- SETTINGS ---------- -->
+      <section class="view" id="view-settings">
+        <div class="grid two">
+
+          <div class="card">
+            <div class="card-head"><h2>Firebase config</h2></div>
+            <label class="field">
+              <span>firebaseConfig JSON (fallback when /__/firebase/init.js is unavailable)</span>
+              <textarea id="cfgJson" rows="12" placeholder='{
+  "apiKey": "...",
+  "authDomain": "...",
+  "projectId": "...",
+  "storageBucket": "...",
+  "messagingSenderId": "...",
+  "appId": "..."
+}'></textarea>
+            </label>
+            <div class="row">
+              <button class="btn primary" id="cfgSave">Save &amp; reload</button>
+              <button class="btn danger" id="cfgClear">Remove saved config</button>
+            </div>
+            <p class="hint">
+              On Firebase Hosting the reserved URL <code>/__/firebase/init.js</code> configures
+              the app automatically — this box is only a fallback for local/preview hosting.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>Project details</h2></div>
+            <ul class="kv" id="projectInfo">
+              <li><span class="k">Status</span><span class="v">booting…</span></li>
+            </ul>
+
+            <div class="row" style="margin-top:16px">
+              <button class="btn ghost" id="copyInfo">Copy details</button>
+              <button class="btn danger" id="hardReset">Clear local data</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Diagnostics</h2></div>
+          <pre class="out" id="diagOut">// run diagnostics to see a full environment report</pre>
+          <div class="row" style="margin-top:12px">
+            <button class="btn primary" id="runDiag">Run diagnostics</button>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+/* ================================================================
+   FIREBASE CONTROL CENTER
+   Extended dashboard built on top of the default hosting template.
+   ================================================================ */
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------
+     0. TINY HELPERS
+     ------------------------------------------------------------ */
+  const $  = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+
+  const pad = (n) => String(n).padStart(2, "0");
+  const clock = (d) => pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+
+  const FEATURES = [
+    "auth", "database", "firestore", "functions",
+    "messaging", "storage", "analytics", "remoteConfig", "performance"
+  ];
+
+  const VIEW_META = {
+    dashboard: ["Dashboard", "Overview of your Firebase project"],
+    auth:      ["Authentication", "Sign in, sign up and inspect the live session"],
+    firestore: ["Firestore", "Real-time document streaming"],
+    database:  ["Realtime Database", "Live JSON tree updates"],
+    storage:   ["Cloud Storage", "Upload and list files"],
+    functions: ["Cloud Functions", "Invoke callable functions"],
+    config:    ["Config & Cloud", "Remote Config, Messaging, Analytics, Performance"],
+    settings:  ["Settings", "Project configuration and maintenance"]
+  };
+
+  /* ------------------------------------------------------------
+     1. STATE
+     ------------------------------------------------------------ */
+  const state = {
+    bootedAt: Date.now(),
+    ready: false,
+    app: null,
+    features: [],
+    user: null,
+    logs: [],
+    fsUnsub: null,
+    dbRef: null,
+    dbHandler: null,
+    projectId: "—"
+  };
+
+  /* ------------------------------------------------------------
+     2. TOASTS + CONSOLE
+     ------------------------------------------------------------ */
+  function toast(message, type) {
+    const el = document.createElement("div");
+    el.className = "toast " + (type || "info");
+    el.textContent = message;
+    $("#toasts").appendChild(el);
+    setTimeout(() => {
+      el.classList.add("out");
+      setTimeout(() => el.remove(), 260);
+    }, 3400);
+  }
+
+  function log(level, message, extra) {
+    const entry = { level, message, time: new Date() };
+    state.logs.push(entry);
+    if (state.logs.length > 400) state.logs.shift();
+    renderLogs();
+
+    const fn = level === "error" ? "error" : level === "warn" ? "warn" : "log";
+    if (extra !== undefined) console[fn]("[FCC] " + message, extra);
+    else console[fn]("[FCC] " + message);
+  }
+
+  function renderLogs() {
+    const box = $("#consoleLog");
+    if (!box) return;
+    if (!state.logs.length) {
+      box.innerHTML = '<div class="l info"><span class="ts">--:--:--</span><span>Console ready. Waiting for events…</span></div>';
+      return;
+    }
+    box.innerHTML = state.logs.map((e) =>
+      '<div class="l ' + e.level + '"><span class="ts">' + clock(e.time) + '</span><span>' +
+      esc(e.message) + "</span></div>"
+    ).join("");
+    box.scrollTop = box.scrollHeight;
+  }
+
+  /** Runs an async action and turns failures into toasts + console lines. */
+  async function guard(label, fn) {
+    try {
+      return await fn();
+    } catch (err) {
+      const msg = err && err.message ? err.message : String(err);
+      log("error", label + ": " + msg, err);
+      toast(label + " — " + msg, "err");
+      return undefined;
+    }
+  }
+
+  /* ------------------------------------------------------------
+     3. THEME
+     ------------------------------------------------------------ */
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    try { localStorage.setItem("fcc-theme", theme); } catch (_) {}
+  }
+
+  function initTheme() {
+    let saved = null;
+    try { saved = localStorage.getItem("fcc-theme"); } catch (_) {}
+    if (!saved) {
+      saved = window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    }
+    applyTheme(saved);
+    $("#themeBtn").addEventListener("click", () => {
+      applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    });
+  }
+
+  /* ------------------------------------------------------------
+     4. VIEW ROUTING
+     ------------------------------------------------------------ */
+  function showView(name) {
+    if (!VIEW_META[name]) name = "dashboard";
+
+    $$(".view").forEach((v) => v.classList.toggle("active", v.id === "view-" + name));
+    $$(".nav-item").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
+
+    $("#viewTitle").textContent = VIEW_META[name][0];
+    $("#viewSub").textContent = VIEW_META[name][1];
+
+    if (window.innerWidth <= 1000) $("#sidebar").classList.remove("open");
+    if (location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
+  }
+
+  function initRouting() {
+    $$(".nav-item").forEach((btn) => {
+      btn.addEventListener("click", () => showView(btn.dataset.view));
+    });
+    $("#menuBtn").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
+    window.addEventListener("hashchange", () => showView(location.hash.slice(1)));
+
+    const initial = location.hash.slice(1);
+    if (initial) showView(initial);
+  }
+
+  /* ------------------------------------------------------------
+     5. FIREBASE BOOT
+     ------------------------------------------------------------ */
+  function detectFeatures(app) {
+    return FEATURES.filter((f) => {
+      try { return typeof app[f] === "function"; }
+      catch (_) { return false; }
+    });
+  }
+
+  function bootFirebase() {
+    if (!window.firebase) {
+      log("error", "Firebase SDK scripts did not load (are you serving from Firebase Hosting?).");
+      setConnection("offline", "SDK missing");
+      renderEnv([["Status", "SDK not loaded"], ["Hint", "Deploy with firebase deploy"]]);
+      return;
+    }
+
+    try {
+      if (!firebase.apps.length) {
+        let saved = null;
+        try { saved = localStorage.getItem("fcc-config"); } catch (_) {}
+        if (!saved) throw new Error("No Firebase configuration available. Add one in Settings.");
+        firebase.initializeApp(JSON.parse(saved));
+        log("warn", "Initialised from locally saved config (reserved init.js unavailable).");
+      }
+
+      state.app = firebase.app();
+      state.features = detectFeatures(state.app);
+      state.ready = true;
+
+      const opts = state.app.options || {};
+      state.projectId = opts.projectId || "(unknown)";
+
+      log("ok", "Firebase ready — modules: " + (state.features.join(", ") || "none"));
+
+      renderFeatures();
+      renderEnv([
+        ["Project ID", state.projectId],
+        ["Auth domain", opts.authDomain || "—"],
+        ["Storage bucket", opts.storageBucket || "—"],
+        ["Messaging sender", opts.messagingSenderId || "—"],
+        ["App ID", opts.appId || "—"],
+        ["SDK version", (firebase.SDK_VERSION || "unknown")]
+      ]);
+      renderProjectInfo();
+      setConnection("online", "Ready");
+
+      $("#statProject").textContent = state.projectId;
+      $("#statProjectId").textContent = "connected";
+
+      wireAuth();
+      wireFirestore();
+      wireDatabase();
+      wireStorage();
+      wireFunctions();
+      wireRemoteConfig();
+      wireMessaging();
+      wireAnalytics();
+      wirePerformance();
+
+    } catch (err) {
+      log("error", "Initialisation failed: " + err.message, err);
+      setConnection("offline", "Init failed");
+      renderEnv([["Status", "initialisation failed"], ["Reason", err.message]]);
+      toast("Firebase init failed — check Settings", "err");
+    }
+  }
+
+  /* ------------------------------------------------------------
+     6. DASHBOARD RENDERING
+     ------------------------------------------------------------ */
+  function renderFeatures() {
+    const box = $("#featureChips");
+    if (!box) return;
+    box.innerHTML = FEATURES.map((f) => {
+      const on = state.features.includes(f);
+      return '<span class="chip ' + (on ? "on" : "off") + '">' + esc(f) + "</span>";
+    }).join("");
+
+    const count = state.features.length;
+    $("#featureCount").textContent = count + "/" + FEATURES.length;
+    $("#statModules").textContent = String(count);
+    $("#statModulesSub").textContent = "of " + FEATURES.length + " detected";
+  }
+
+  function renderEnv(rows) {
+    const ul = $("#envInfo");
+    if (!ul) return;
+    ul.innerHTML = rows.map(([k, v]) =>
+      '<li><span class="k">' + esc(k) + '</span><span class="v">' + esc(v) + "</span></li>"
+    ).join("");
+  }
+
+  function renderProjectInfo() {
+    const ul = $("#projectInfo");
+    if (!ul) return;
+    const rows = [
+      ["Project ID", state.projectId],
+      ["Modules", state.features.length + " / " + FEATURES.length],
+      ["User agent", navigator.userAgent.slice(0, 60) + (navigator.userAgent.length > 60 ? "…" : "")],
+      ["Language", navigator.language || "—"],
+      ["Online", navigator.onLine ? "yes" : "no"],
+      ["Host", location.host || "file://"]
+    ];
+    ul.innerHTML = rows.map(([k, v]) =>
+      '<li><span class="k">' + esc(k) + '</span><span class="v">' + esc(v) + "</span></li>"
+    ).join("");
+  }
+
+  function setConnection(kind, text) {
+    const badge = $("#connBadge");
+    if (!badge) return;
+    badge.classList.remove("online", "offline");
+    if (kind === "online") badge.classList.add("online");
+    if (kind === "offline") badge.classList.add("offline");
+    $("#connText").textContent = text;
+  }
+
+  function startUptimeClock() {
+    const el = $("#statUptime");
+    if (!el) return;
+    setInterval(() => {
+      const secs = Math.floor((Date.now() - state.bootedAt) / 1000);
+      el.textContent = pad(Math.floor(secs / 60)) + ":" + pad(secs % 60);
+    }, 1000);
+  }
+
+  /* ------------------------------------------------------------
+     7. AUTHENTICATION
+     ------------------------------------------------------------ */
+  function wireAuth() {
+    if (!state.features.includes("auth")) {
+      log("warn", "Auth module unavailable — auth view disabled.");
+      return;
+    }
+
+    firebase.auth().onAuthStateChanged((user) => {
+      state.user = user;
+      renderUser();
+      log(user ? "ok" : "info", user
+        ? "Auth state: signed in as " + (user.email || user.uid)
+        : "Auth state: signed out");
+    });
+
+    $("#btnSignIn").addEventListener("click", () => guard("Sign in", async () => {
+      const email = $("#authEmail").value.trim();
+      const pass = $("#authPass").value;
+      if (!email || !pass) throw new Error("Email and password are required");
+      await firebase.auth().signInWithEmailAndPassword(email, pass);
+      toast("Signed in", "ok");
+    }));
+
+    $("#btnSignUp").addEventListener("click", () => guard("Sign up", async () => {
+      const email = $("#authEmail").value.trim();
+      const pass = $("#authPass").value;
+      if (!email || pass.length < 6) throw new Error("Email required and password ≥ 6 chars");
+      await firebase.auth().createUserWithEmailAndPassword(email, pass);
+      toast("Account created", "ok");
+    }));
+
+    $("#btnAnon").addEventListener("click", () => guard("Anonymous sign-in", async () => {
+      await firebase.auth().signInAnonymously();
+      toast("Signed in anonymously", "ok");
+    }));
+
+    $("#btnSignOut").addEventListener("click", () => guard("Sign out", async () => {
+      await firebase.auth().signOut();
+      toast("Signed out", "ok");
+    }));
+
+    $("#btnReset").addEventListener("click", () => guard("Password reset", async () => {
+      const email = $("#resetEmail").value.trim();
+      if (!email) throw new Error("Enter an email address first");
+      await firebase.auth().sendPasswordResetEmail(email);
+      toast("Reset email sent", "ok");
+    }));
+
+    renderUser();
+  }
+
+  function renderUser() {
+    const u = state.user;
+    const chip = $("#userChip");
+
+    if (u) {
+      chip.classList.add("on");
+      chip.querySelector(".t").textContent = u.email || ("uid:" + u.uid.slice(0, 8));
+      $("#statUser").textContent = u.email || (u.isAnonymous ? "Anonymous" : "User");
+      $("#statProvider").textContent =
+        (u.providerData && u.providerData[0] && u.providerData[0].providerId) ||
+        (u.isAnonymous ? "anonymous" : "password");
+    } else {
+      chip.classList.remove("on");
+      chip.querySelector(".t").textContent = "Signed out";
+      $("#statUser").textContent = "Signed out";
+      $("#statProvider").textContent = "no provider";
+    }
+
+    const ul = $("#userInfo");
+    if (!ul) return;
+
+    if (!u) {
+      ul.innerHTML = '<li><span class="k">State</span><span class="v">signed out</span></li>';
+      return;
+    }
+
+    const rows = [
+      ["UID", u.uid],
+      ["Email", u.email || "—"],
+      ["Verified", String(u.emailVerified)],
+      ["Anonymous", String(u.isAnonymous)],
+      ["Provider", (u.providerData[0] && u.providerData[0].providerId) || "password"],
+      ["Created", u.metadata && u.metadata.creationTime ? u.metadata.creationTime : "—"],
+      ["Last sign-in", u.metadata && u.metadata.lastSignInTime ? u.metadata.lastSignInTime : "—"]
+    ];
+
+    ul.innerHTML = rows.map(([k, v]) =>
+      '<li><span class="k">' + esc(k) + '</span><span class="v">' + esc(v) + "</span></li>"
+    ).join("");
+  }
+
+  /* ------------------------------------------------------------
+     8. FIRESTORE
+     ------------------------------------------------------------ */
+  function wireFirestore() {
+    if (!state.features.includes("firestore")) {
+      log("warn", "Firestore module unavailable.");
+      return;
+    }
+
+    $("#fsAdd").addEventListener("click", () => guard("Add document", async () => {
+      const col = $("#fsCollection").value.trim() || "notes";
+      const text = $("#fsText").value.trim();
+      if (!text) throw new Error("Write something in the text field first");
+
+      await firebase.firestore().collection(col).add({
+        text,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-    </script>
-  </body>
+
+      $("#fsText").value = "";
+      log("ok", "Firestore: document added to '" + col + "'");
+      toast("Document added", "ok");
+    }));
+
+    $("#fsListen").addEventListener("click", () => {
+      const col = $("#fsCollection").value.trim() || "notes";
+      stopFirestore();
+
+      state.fsUnsub = firebase.firestore().collection(col)
+        .orderBy("createdAt", "desc")
+        .limit(50)
+        .onSnapshot(
+          (snap) => {
+            const items = snap.docs.map((d) => ({ id: d.id, data: d.data() }));
+            renderFirestore(items);
+            log("info", "Firestore: snapshot with " + items.length + " document(s)");
+          },
+          (err) => {
+            log("error", "Firestore listener: " + err.message, err);
+            toast("Firestore listener failed: " + err.message, "err");
+          }
+        );
+
+      log("ok", "Firestore: listening on '" + col + "'");
+    });
+
+    $("#fsStop").addEventListener("click", () => {
+      stopFirestore();
+      log("info", "Firestore: listener stopped");
+    });
+  }
+
+  function stopFirestore() {
+    if (state.fsUnsub) {
+      state.fsUnsub();
+      state.fsUnsub = null;
+    }
+  }
+
+  function renderFirestore(items) {
+    const box = $("#fsList");
+    $("#fsCount").textContent = String(items.length);
+
+    if (!items.length) {
+      box.innerHTML = '<div class="empty">No documents yet — add one above.</div>';
+      return;
+    }
+
+    box.innerHTML = items.map(({ id, data }) => {
+      const text = data.text !== undefined ? data.text : JSON.stringify(data);
+      return (
+        '<div class="list-item">' +
+          '<div class="body">' +
+            '<div class="t">' + esc(text) + "</div>" +
+            '<div class="s">' + esc(id) + "</div>" +
+          "</div>" +
+          '<div class="actions">' +
+            '<button class="btn ghost sm" data-del-fs="' + esc(id) + '">Delete</button>' +
+          "</div>" +
+        "</div>"
+      );
+    }).join("");
+
+    box.querySelectorAll("[data-del-fs]").forEach((btn) => {
+      btn.addEventListener("click", () => guard("Delete document", async () => {
+        const col = $("#fsCollection").value.trim() || "notes";
+        await firebase.firestore().collection(col).doc(btn.dataset.delFs).delete();
+        log("ok", "Firestore: document deleted");
+        toast("Document deleted", "ok");
+      }));
+    });
+  }
+
+  /* ------------------------------------------------------------
+     9. REALTIME DATABASE
+     ------------------------------------------------------------ */
+  function wireDatabase() {
+    if (!state.features.includes("database")) {
+      log("warn", "Realtime Database module unavailable.");
+      return;
+    }
+
+    // .info/connected gives us a genuine online/offline signal
+    try {
+      firebase.database().ref(".info/connected").on("value", (snap) => {
+        const online = snap.val() === true;
+        setConnection(online ? "online" : "offline", online ? "Connected" : "Offline");
+      });
+    } catch (err) {
+      log("warn", "Cannot observe .info/connected: " + err.message);
+    }
+
+    $("#dbPush").addEventListener("click", () => guard("Push value", async () => {
+      const path = $("#dbPath").value.trim() || "messages";
+      const value = $("#dbValue").value.trim();
+      if (!value) throw new Error("Write a value first");
+
+      await firebase.database().ref(path).push({
+        text: value,
+        createdAt: Date.now()
+      });
+
+      $("#dbValue").value = "";
+      log("ok", "Realtime DB: value pushed to '" + path + "'");
+      toast("Value pushed", "ok");
+    }));
+
+    $("#dbListen").addEventListener("click", () => {
+      const path = $("#dbPath").value.trim() || "messages";
+      stopDatabase();
+
+      state.dbRef = firebase.database().ref(path);
+      state.dbHandler = state.dbRef.on(
+        "value",
+        (snap) => {
+          const val = snap.val() || {};
+          const items = Object.keys(val).map((k) => ({
+            key: k,
+            value: val[k] && val[k].text !== undefined ? val[k].text : JSON.stringify(val[k])
+          })).reverse();
+          renderDatabase(items);
+          log("info", "Realtime DB: " + items.length + " entr(ies) at '" + path + "'");
+        },
+        (err) => {
+          log("error", "Realtime DB listener: " + err.message, err);
+          toast("Realtime DB listener failed: " + err.message, "err");
+        }
+      );
+
+      log("ok", "Realtime DB: listening on '" + path + "'");
+    });
+
+    $("#dbStop").addEventListener("click", () => {
+      stopDatabase();
+      log("info", "Realtime DB: listener stopped");
+    });
+  }
+
+  function stopDatabase() {
+    if (state.dbRef && state.dbHandler) {
+      state.dbRef.off("value", state.dbHandler);
+    }
+    state.dbRef = null;
+    state.dbHandler = null;
+  }
+
+  function renderDatabase(items) {
+    const box = $("#dbList");
+    $("#dbCount").textContent = String(items.length);
+
+    if (!items.length) {
+      box.innerHTML = '<div class="empty">Nothing at this path yet — push a value.</div>';
+      return;
+    }
+
+    box.innerHTML = items.map((it) =>
+      '<div class="list-item">' +
+        '<div class="body">' +
+          '<div class="t">' + esc(it.value) + "</div>" +
+          '<div class="s">' + esc(it.key) + "</div>" +
+        "</div>" +
+        '<div class="actions">' +
+          '<button class="btn ghost sm" data-del-db="' + esc(it.key) + '">Delete</button>' +
+        "</div>" +
+      "</div>"
+    ).join("");
+
+    box.querySelectorAll("[data-del-db]").forEach((btn) => {
+      btn.addEventListener("click", () => guard("Delete entry", async () => {
+        const path = $("#dbPath").value.trim() || "messages";
+        await firebase.database().ref(path).child(btn.dataset.delDb).remove();
+        log("ok", "Realtime DB: entry removed");
+        toast("Entry removed", "ok");
+      }));
+    });
+  }
+
+  /* ------------------------------------------------------------
+     10. CLOUD STORAGE
+     ------------------------------------------------------------ */
+  function wireStorage() {
+    if (!state.features.includes("storage")) {
+      log("warn", "Storage module unavailable.");
+      return;
+    }
+
+    $("#stUpload").addEventListener("click", () => guard("Upload", async () => {
+      const file = $("#stFile").files[0];
+      if (!file) throw new Error("Choose a file first");
+
+      const path = "uploads/" + Date.now() + "_" + file.name;
+      const task = firebase.storage().ref(path).put(file);
+      const bar = $("#stBar");
+      bar.style.width = "0%";
+
+      task.on("state_changed",
+        (snap) => {
+          const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+          bar.style.width = pct + "%";
+        },
+        (err) => {
+          log("error", "Upload failed: " + err.message, err);
+          toast("Upload failed: " + err.message, "err");
+        },
+        async () => {
+          const url = await task.snapshot.ref.getDownloadURL();
+          bar.style.width = "100%";
+          log("ok", "Storage: uploaded " + path);
+          toast("Upload complete", "ok");
+          setTimeout(() => { bar.style.width = "0%"; }, 1200);
+          refreshStorageList();
+          return url;
+        }
+      );
+    }));
+
+    $("#stRefresh").addEventListener("click", refreshStorageList);
+
+    refreshStorageList();
+  }
+
+  async function refreshStorageList() {
+    if (!state.features.includes("storage")) return;
+
+    try {
+      const res = await firebase.storage().ref("uploads").listAll();
+      const items = res.items.map((it) => ({ name: it.name, fullPath: it.fullPath }));
+      renderStorage(items);
+      log("info", "Storage: " + items.length + " file(s) listed");
+    } catch (err) {
+      log("warn", "Storage list failed: " + err.message);
+      $("#stList").innerHTML = '<div class="empty">Could not list files — check Storage rules.</div>';
+    }
+  }
+
+  function renderStorage(items) {
+    const box = $("#stList");
+    $("#stCount").textContent = String(items.length);
+
+    if (!items.length) {
+      box.innerHTML = '<div class="empty">No files uploaded yet.</div>';
+      return;
+    }
+
+    box.innerHTML = items.map((it) =>
+      '<div class="list-item">' +
+        '<div class="body">' +
+          '<div class="t">' + esc(it.name) + "</div>" +
+          '<div class="s">' + esc(it.fullPath) + "</div>" +
+        "</div>" +
+        '<div class="actions">' +
+          '<button class="btn ghost sm" data-url="' + esc(it.fullPath) + '">URL</button>' +
+          '<button class="btn ghost sm" data-del-st="' + esc(it.fullPath) + '">Delete</button>' +
+        "</div>" +
+      "</div>"
+    ).join("");
+
+    box.querySelectorAll("[data-url]").forEach((btn) => {
+      btn.addEventListener("click", () => guard("Get download URL", async () => {
+        const url = await firebase.storage().ref(btn.dataset.url).getDownloadURL();
+        log("ok", "Download URL: " + url);
+        try {
+          await navigator.clipboard.writeText(url);
+          toast("Download URL copied", "ok");
+        } catch (_) {
+          toast("URL logged to console", "info");
+        }
+      }));
+    });
+
+    box.querySelectorAll("[data-del-st]").forEach((btn) => {
+      btn.addEventListener("click", () => guard("Delete file", async () => {
+        await firebase.storage().ref(btn.dataset.delSt).delete();
+        log("ok", "Storage: file deleted");
+        toast("File deleted", "ok");
+        refreshStorageList();
+      }));
+    });
+  }
+
+  /* ------------------------------------------------------------
+     11. CLOUD FUNCTIONS
+     ------------------------------------------------------------ */
+  function wireFunctions() {
+    if (!state.features.includes("functions")) {
+      log("warn", "Functions module unavailable.");
+      return;
+    }
+
+    $("#fnCall").addEventListener("click", () => guard("Invoke function", async () => {
+      const name = $("#fnName").value.trim();
+      if (!name) throw new Error("Function name is required");
+
+      let payload = {};
+      const raw = $("#fnData").value.trim();
+      if (raw) {
+        try { payload = JSON.parse(raw); }
+        catch (e) { throw new Error("Payload is not valid JSON"); }
+      }
+
+      const out = $("#fnOut");
+      out.textContent = "// invoking " + name + " …";
+
+      const callable = firebase.functions().httpsCallable(name);
+      const res = await callable(payload);
+
+      out.textContent = JSON.stringify(res.data, null, 2);
+      log("ok", "Functions: " + name + " returned successfully");
+      toast("Function returned", "ok");
+    }));
+
+    $("#fnClear").addEventListener("click", () => {
+      $("#fnOut").textContent = "// result appears here";
+    });
+  }
+
+  /* ------------------------------------------------------------
+     12. REMOTE CONFIG
+     ------------------------------------------------------------ */
+  function wireRemoteConfig() {
+    if (!state.features.includes("remoteConfig")) {
+      log("warn", "Remote Config module unavailable.");
+      return;
+    }
+
+    $("#rcFetch").addEventListener("click", () => guard("Remote Config", async () => {
+      const rc = firebase.remoteConfig();
+      await rc.fetchAndActivate();
+
+      const all = rc.getAll();
+      const keys = Object.keys(all);
+      const ul = $("#rcList");
+
+      if (!keys.length) {
+        ul.innerHTML = '<li><span class="k">Result</span><span class="v">no parameters defined</span></li>';
+      } else {
+        ul.innerHTML = keys.map((k) =>
+          '<li><span class="k">' + esc(k) + '</span><span class="v">' +
+          esc(String(all[k].asString())) + "</span></li>"
+        ).join("");
+      }
+
+      log("ok", "Remote Config: fetched " + keys.length + " parameter(s)");
+      toast("Remote Config activated", "ok");
+    }));
+
+    $("#rcDefaults").addEventListener("click", () => {
+      $("#rcList").innerHTML = '<li><span class="k">Status</span><span class="v">defaults cleared</span></li>';
+      log("info", "Remote Config: defaults cleared from view");
+    });
+  }
+
+  /* ------------------------------------------------------------
+     13. CLOUD MESSAGING
+     ------------------------------------------------------------ */
+  function wireMessaging() {
+    if (!state.features.includes("messaging")) {
+      log("warn", "Messaging module unavailable.");
+      return;
+    }
+
+    $("#msgPermission").addEventListener("click", () => guard("Notification permission", async () => {
+      const perm = await Notification.requestPermission();
+      log(perm === "granted" ? "ok" : "warn", "Notification permission: " + perm);
+      toast("Permission: " + perm, perm === "granted" ? "ok" : "warn");
+    }));
+
+    $("#msgToken").addEventListener("click", () => guard("Get FCM token", async () => {
+      const supported = await firebase.messaging.isSupported().catch(() => false);
+      if (!supported) throw new Error("Messaging is not supported in this browser");
+
+      const token = await firebase.messaging().getToken();
+      $("#msgOut").textContent = token || "// no token returned";
+      log("ok", "FCM token acquired");
+      toast("Token acquired", "ok");
+
+      firebase.messaging().onMessage((payload) => {
+        log("info", "Foreground message: " + JSON.stringify(payload.notification || payload.data));
+      });
+    }));
+  }
+
+  /* ------------------------------------------------------------
+     14. ANALYTICS
+     ------------------------------------------------------------ */
+  function wireAnalytics() {
+    if (!state.features.includes("analytics")) {
+      log("warn", "Analytics module unavailable.");
+      return;
+    }
+
+    $("#anLog").addEventListener("click", () => guard("Log event", async () => {
+      const name = $("#anEvent").value.trim();
+      if (!name) throw new Error("Event name is required");
+
+      firebase.analytics().logEvent(name, { source: "control-center", ts: Date.now() });
+      log("ok", "Analytics: event '" + name + "' logged");
+      toast("Event logged: " + name, "ok");
+    }));
+  }
+
+  /* ------------------------------------------------------------
+     15. PERFORMANCE
+     ------------------------------------------------------------ */
+  function wirePerformance() {
+    if (!state.features.includes("performance")) {
+      log("warn", "Performance module unavailable.");
+      return;
+    }
+
+    $("#perfTrace").addEventListener("click", () => guard("Performance trace", async () => {
+      const trace = firebase.performance().trace("control_center_sample");
+      trace.start();
+
+      const t0 = performance.now();
+      await new Promise((r) => setTimeout(r, 240));
+      const elapsed = Math.round(performance.now() - t0);
+
+      trace.putAttribute("view", "settings");
+      trace.putMetric("simulated_ms", elapsed);
+      trace.stop();
+
+      $("#perfOut").textContent =
+        "trace: control_center_sample\n" +
+        "metric simulated_ms = " + elapsed + "\n" +
+        "status: sent to Performance Monitoring";
+
+      log("ok", "Performance: trace completed in " + elapsed + "ms");
+      toast("Trace sent", "ok");
+    }));
+  }
+
+  /* ------------------------------------------------------------
+     16. SETTINGS
+     ------------------------------------------------------------ */
+  function wireSettings() {
+    let saved = "";
+    try { saved = localStorage.getItem("fcc-config") || ""; } catch (_) {}
+    if (saved) {
+      try { $("#cfgJson").value = JSON.stringify(JSON.parse(saved), null, 2); }
+      catch (_) { $("#cfgJson").value = saved; }
+    }
+
+    $("#cfgSave").addEventListener("click", () => {
+      const raw = $("#cfgJson").value.trim();
+      if (!raw) { toast("Paste a firebaseConfig JSON first", "warn"); return; }
+
+      let parsed;
+      try { parsed = JSON.parse(raw); }
+      catch (e) { toast("Invalid JSON", "err"); return; }
+
+      if (!parsed.projectId || !parsed.apiKey) {
+        toast("Config needs at least apiKey and projectId", "warn");
+        return;
+      }
+
+      try { localStorage.setItem("fcc-config", JSON.stringify(parsed)); } catch (_) {}
+      log("ok", "Config saved — reloading…");
+      toast("Saved — reloading", "ok");
+      setTimeout(() => location.reload(), 600);
+    });
+
+    $("#cfgClear").addEventListener("click", () => {
+      try { localStorage.removeItem("fcc-config"); } catch (_) {}
+      $("#cfgJson").value = "";
+      log("warn", "Saved config removed");
+      toast("Saved config removed", "ok");
+    });
+
+    $("#copyInfo").addEventListener("click", () => guard("Copy details", async () => {
+      const text = JSON.stringify({
+        projectId: state.projectId,
+        features: state.features,
+        user: state.user ? { uid: state.user.uid, email: state.user.email } : null,
+        host: location.host,
+        sdk: firebase.SDK_VERSION || "unknown"
+      }, null, 2);
+
+      await navigator.clipboard.writeText(text);
+      toast("Details copied to clipboard", "ok");
+    }));
+
+    $("#hardReset").addEventListener("click", () => {
+      try {
+        localStorage.removeItem("fcc-config");
+        localStorage.removeItem("fcc-theme");
+      } catch (_) {}
+      toast("Local data cleared — reloading", "ok");
+      setTimeout(() => location.reload(), 600);
+    });
+
+    $("#runDiag").addEventListener("click", runDiagnostics);
+
+    $("#clearLogs").addEventListener("click", () => {
+      state.logs = [];
+      renderLogs();
+      toast("Console cleared", "ok");
+    });
+  }
+
+  async function runDiagnostics() {
+    const lines = [];
+    const t0 = performance.now();
+
+    lines.push("== Firebase Control Center diagnostics ==");
+    lines.push("timestamp   : " + new Date().toISOString());
+    lines.push("host        : " + (location.host || "file://"));
+    lines.push("protocol    : " + location.protocol);
+    lines.push("online      : " + navigator.onLine);
+    lines.push("user agent  : " + navigator.userAgent);
+    lines.push("");
+
+    lines.push("-- SDK --");
+    lines.push("firebase    : " + (window.firebase ? "loaded" : "MISSING"));
+    lines.push("sdk version : " + (window.firebase ? (firebase.SDK_VERSION || "unknown") : "n/a"));
+    lines.push("apps        : " + (window.firebase ? firebase.apps.length : 0));
+    lines.push("project     : " + state.projectId);
+    lines.push("modules     : " + (state.features.join(", ") || "none"));
+    lines.push("");
+
+    lines.push("-- Runtime --");
+    lines.push("theme       : " + document.documentElement.dataset.theme);
+    lines.push("viewport    : " + window.innerWidth + "x" + window.innerHeight);
+    lines.push("uptime      : " + Math.round((Date.now() - state.bootedAt) / 1000) + "s");
+    lines.push("logs        : " + state.logs.length + " entries");
+    lines.push("");
+
+    lines.push("-- Connectivity checks --");
+
+    if (state.features.includes("database")) {
+      try {
+        const snap = await firebase.database().ref(".info/connected").once("value");
+        lines.push("rtdb        : " + (snap.val() === true ? "connected" : "not connected"));
+      } catch (e) {
+        lines.push("rtdb        : error — " + e.message);
+      }
+    } else {
+      lines.push("rtdb        : module unavailable");
+    }
+
+    if (state.features.includes("firestore")) {
+      try {
+        await firebase.firestore().collection("__diag").limit(1).get();
+        lines.push("firestore   : reachable");
+      } catch (e) {
+        lines.push("firestore   : error — " + e.message);
+      }
+    } else {
+      lines.push("firestore   : module unavailable");
+    }
+
+    if (state.features.includes("auth")) {
+      lines.push("auth        : " + (state.user ? "signed in (" + state.user.uid + ")" : "signed out"));
+    } else {
+      lines.push("auth        : module unavailable");
+    }
+
+    lines.push("");
+    lines.push("completed in " + Math.round(performance.now() - t0) + "ms");
+
+    $("#diagOut").textContent = lines.join("\n");
+    log("ok", "Diagnostics complete");
+    toast("Diagnostics complete", "ok");
+  }
+
+  /* ------------------------------------------------------------
+     17. GLOBAL ERROR CAPTURE
+     ------------------------------------------------------------ */
+  function wireErrorCapture() {
+    window.addEventListener("error", (e) => {
+      log("error", "Uncaught: " + (e.message || "unknown error"));
+    });
+    window.addEventListener("unhandledrejection", (e) => {
+      const r = e.reason;
+      log("error", "Unhandled promise rejection: " + (r && r.message ? r.message : String(r)));
+    });
+    window.addEventListener("online", () => {
+      setConnection("online", "Online");
+      log("info", "Network: online");
+    });
+    window.addEventListener("offline", () => {
+      setConnection("offline", "Offline");
+      log("warn", "Network: offline");
+    });
+  }
+
+  /* ------------------------------------------------------------
+     18. BOOT SEQUENCE
+     ------------------------------------------------------------ */
+  function boot() {
+    initTheme();
+    initRouting();
+    wireErrorCapture();
+    wireSettings();
+    renderLogs();
+    startUptimeClock();
+    renderFeatures();
+
+    log("info", "Control Center booting…");
+    setConnection("", "Connecting…");
+
+    // Deferred SDK scripts have already executed by DOMContentLoaded.
+    bootFirebase();
+
+    if (!state.ready) {
+      renderFeatures();
+    }
+
+    log("info", "Boot sequence finished");
+  }
+
+  document.addEventListener("DOMContentLoaded", boot);
+})();
+</script>
+</body>
 </html>

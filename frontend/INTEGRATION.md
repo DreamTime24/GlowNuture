@@ -4,7 +4,7 @@ The storefront entry point is `frontend/index.html`. Its local catalog images an
 
 Script order is deliberate: api-client.js → media-paths.js → local-catalog.js → app.js → glow-motion.js → glow-auth.js → firebase-bridge.js → commerce-ui.js → catalog-console.js → glow-admin.js. `media-paths.js` exposes `GNMediaURL` to resolve bundled image, video and fallback URLs relative to the frontend's actual location. Do not bypass the API with a private provider key or a browser-admin flag.
 
-The four original theme CSS files stay unchanged. commerce.css adds card images/ingredients, forms, comparison and account/admin details. The Nuri/mandala scene and original motion remain. Actual product images use object-fit:contain and fallback safely; SVG illustrations remain decorative.
+The theme and existing motion remain. Product photos use white panels, consistent padding and `object-fit: contain` without cropping or changing the original image files. Categories, journal artwork and the skincare journey use local product photographs instead of bottle illustrations; functional SVG icons remain.
 
 Browser storage v3 contains only catalog IDs, quantities, selections and browsing lists; legacy v2 profile/order storage is cleared. Server sessions, recipient data, authoritative money and stock do not live in LocalStorage. Signed-in list changes sync to customer_state.
 
@@ -15,6 +15,8 @@ JSDOM checks exercise DOM/event behavior with fixture HTTP. They do not replace 
 ## Local image catalog
 
 The storefront catalog loads immediately from `assets/local-catalog.js`; browsing its images requires no API. Source JPEGs live in `frontend/assets/image/` and the four background MP4s in `frontend/assets/videos/`. Local rows have `source: 'local'` and `displayOnly: true`, with no prices, stock, cart or checkout actions. Account, orders and other live commerce features still require the backend.
+
+`glownuture_morning.webp` and `glownuture_night.webp` in the image folder fill the morning/night comparison slider. These two editorial photos are excluded from product catalog generation. Drag, touch and keyboard controls remain available.
 
 After adding, removing or renaming JPEGs, run this command from the project root:
 

@@ -1,27 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
+<!-- ============================================================
+     META / CHARSET
+     ============================================================ -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="format-detection" content="telephone=no" />
+
+<!-- ============================================================
+     SECURITY LAYER
+     ------------------------------------------------------------
+     The Content-Security-Policy below is applied via <meta> for
+     defence-in-depth. For full coverage, also send the following
+     as HTTP response headers on your web server / CDN:
+
+       Content-Security-Policy: <same policy, tightened>
+       Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+       X-Content-Type-Options: nosniff
+       X-Frame-Options: DENY
+       Referrer-Policy: strict-origin-when-cross-origin
+       Permissions-Policy: geolocation=(), microphone=(), camera=(),
+                           payment=(), usb=(), magnetometer=(),
+                           gyroscope=(), accelerometer=()
+       Cross-Origin-Opener-Policy: same-origin
+       Cross-Origin-Resource-Policy: same-origin
+       Cross-Origin-Embedder-Policy: require-corp
+
+     CSP notes:
+       * 'unsafe-inline' for scripts is kept because legacy paths may
+         use inline handlers. Remove once the external JS is verified
+         to avoid inline event attributes.
+       * 'unsafe-inline' for styles is kept because several UI
+         components inject styles at runtime. Replace with hashes or
+         nonces when possible.
+       * 'unsafe-eval' is intentionally NOT allowed. If a dependency
+         needs it, isolate it inside a sandboxed worker instead.
+       * frame-src allows Firebase auth popups and Google sign-in.
+     ============================================================ -->
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.googletagmanager.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com data:;
+  img-src 'self' data: blob: https:;
+  media-src 'self' https:;
+  connect-src 'self' https: wss:;
+  worker-src 'self' blob:;
+  frame-src 'self' https://*.firebaseapp.com https://accounts.google.com;
+  object-src 'none';
+  frame-ancestors 'none';
+  base-uri 'self';
+  form-action 'self';
+" />
+
+<!-- ============================================================
+     TITLE & DESCRIPTION
+     ============================================================ -->
 <title>Glow Nuture | Skin, hair and daily care products in Bangladesh</title>
 <meta name="description" content="Skin, hair and daily personal-care products with clear ingredient information. Delivery across Bangladesh and cash on delivery." />
-<meta name="theme-color" content="#FAF7F2" />
-<meta property="og:type" content="website" /><meta property="og:site_name" content="Glow Nuture" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="author" content="Glow Nuture" />
+<link rel="canonical" href="https://glownuture.com/" />
+
+<!-- ============================================================
+     OPEN GRAPH / TWITTER
+     ============================================================ -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Glow Nuture" />
+<meta property="og:locale" content="en_BD" />
 <meta property="og:title" content="Glow Nuture | Skin, hair and daily care products in Bangladesh" />
 <meta property="og:description" content="Clear ingredient information, delivery across Bangladesh and cash on delivery." />
+<meta property="og:url" content="https://glownuture.com/" />
+<meta property="og:image" content="https://glownuture.com/assets/og-image.jpg" />
+<meta property="og:image:alt" content="Glow Nuture product collection" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="icon" type="image/svg+xml" href="./assets/favicon.svg"><link rel="manifest" href="./manifest.webmanifest">
-  <!-- Set to your API origin only when frontend and backend are hosted separately. -->
-  <meta name="gn-api-base" content="">
+<meta name="twitter:title" content="Glow Nuture | Skin, hair and daily care products in Bangladesh" />
+<meta name="twitter:description" content="Clear ingredient information, delivery across Bangladesh and cash on delivery." />
+<meta name="twitter:image" content="https://glownuture.com/assets/og-image.jpg" />
+<meta name="twitter:site" content="@glownuture" />
+
+<!-- ============================================================
+     PWA / THEME
+     ============================================================ -->
+<meta name="theme-color" content="#FAF7F2" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Glow Nuture" />
+<meta name="application-name" content="Glow Nuture" />
+<link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+<link rel="manifest" href="./manifest.webmanifest" />
+
+<!-- ============================================================
+     CUSTOM API CONFIG
+     ============================================================ -->
+<!-- Set to your API origin only when frontend and backend are hosted separately. -->
+<meta name="gn-api-base" content="" />
+
+<!-- ============================================================
+     PRE-CONNECT
+     ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.gstatic.com">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+<!-- ============================================================
+     FONTS
+     ============================================================ -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     APP STYLES
+     ============================================================ -->
 <link rel="stylesheet" href="./assets/app.css">
 <link rel="stylesheet" href="./assets/glow-enhance.css">
 <link rel="stylesheet" href="./assets/glow-motion.css">
-<link rel="stylesheet" href="./assets/glow-auth.css"><link rel="stylesheet" href="./assets/commerce.css"><link rel="stylesheet" href="./assets/catalog-studio.css">
+<link rel="stylesheet" href="./assets/glow-auth.css">
+<link rel="stylesheet" href="./assets/commerce.css">
+<link rel="stylesheet" href="./assets/catalog-studio.css">
+
+<!-- ============================================================
+     ACCESSIBILITY MICRO-STYLES
+     ============================================================ -->
+<style>
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: 10000;
+    background: #111;
+    color: #fff;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 8px 0;
+    transition: top 0.15s ease;
+  }
+  .skip-link:focus {
+    top: 0;
+    outline: 3px solid #ffa100;
+    outline-offset: 2px;
+  }
+  .noscript-banner {
+    background: #fff3cd;
+    border: 1px solid #ffe69c;
+    color: #664d03;
+    padding: 16px 20px;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: center;
+  }
+  .noscript-banner strong { display: block; margin-bottom: 4px; font-size: 15px; }
+</style>
+
+<!-- ============================================================
+     STRUCTURED DATA (JSON-LD)
+     ============================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://glownuture.com/#organization",
+      "name": "Glow Nuture",
+      "url": "https://glownuture.com/",
+      "logo": "https://glownuture.com/assets/favicon.svg",
+      "description": "Skin, hair and daily personal-care products with clear ingredient information. Delivery across Bangladesh and cash on delivery.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BD"
+      },
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "areaServed": "BD",
+        "availableLanguage": ["English", "Bengali"]
+      }]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://glownuture.com/#website",
+      "url": "https://glownuture.com/",
+      "name": "Glow Nuture",
+      "publisher": { "@id": "https://glownuture.com/#organization" },
+      "inLanguage": "en-BD",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://glownuture.com/#/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://glownuture.com/#breadcrumb",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://glownuture.com/#/"
+      }]
+    }
+  ]
+}
+</script>
 </head>
+
 <body>
+<!-- Skip to main content (keyboard users) -->
+<a class="skip-link" href="#app">Skip to main content</a>
+
+<!-- No-JS fallback -->
+<noscript>
+  <div class="noscript-banner" role="alert">
+    <strong>JavaScript is disabled in your browser.</strong>
+    Glow Nuture needs JavaScript for product browsing, cart management and checkout.
+    Please enable JavaScript in your browser settings and reload this page.
+    For assistance, please contact our support team.
+  </div>
+</noscript>
 
 <!-- ============ Announcement ============ -->
 <div class="announce" id="announce">
@@ -110,6 +316,7 @@
 </div>
 
 <div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
+
 <script src="./assets/api-client.js" defer></script>
 <script src="./assets/media-paths.js" defer></script>
 <script src="./assets/local-catalog.js" defer></script>

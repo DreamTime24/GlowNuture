@@ -50,7 +50,7 @@ test('homepage hero uses bundled product photos when the public catalog is empty
   try{
     const hero=empty.w.document.querySelector('.hero-visual .hv-inner');
     const paths=Array.from(hero.querySelectorAll('img'),img=>new URL(img.src).pathname);
-    assert.equal(hero.classList.contains('hv-inner--illustrations'),true);
+    assert.equal(hero.classList.contains('hero-links'),true);
     assert.deepEqual(paths,['/assets/image/cerave-foaming-facial-cleanser.jpg','/assets/image/the-ordinary-niacinamide-10-plus-zinc-1.jpg','/assets/image/skin1004-sun-serum.jpg']);
     for(const source of paths)assert.match(source,/^\/assets\/image\/[a-z0-9-]+\.jpg$/);
     for(const image of hero.querySelectorAll('img')){assert.ok(image.alt.length>0);assert.ok(fs.existsSync(path.join('frontend',new URL(image.src).pathname.slice(1))));}
@@ -59,9 +59,12 @@ test('homepage hero uses bundled product photos when the public catalog is empty
   const populated=await setup();
   try{
     const hero=populated.w.document.querySelector('.hero-visual .hv-inner');
-    assert.equal(hero.classList.contains('hv-inner--illustrations'),false);
+    assert.equal(hero.classList.contains('hero-links'),true);
     assert.match(hero.querySelector('img').src,/example\.com\/product\.png/);
-    assert.equal(hero.querySelectorAll('img').length,1);
+    assert.equal(hero.querySelectorAll('img').length,3);
+    assert.equal(hero.querySelectorAll('a').length,0);
+    assert.equal(hero.querySelectorAll('.hero-link-card').length,3);
+    assert.equal(populated.w.document.querySelector('.hero-badge'),null);
     noErrors(populated);
   }finally{populated.close();}
 });

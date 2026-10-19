@@ -851,7 +851,8 @@ function viewHome(){
 
   const heroProducts = all.slice(0, 3);
   const heroVideos=(window.GNLocalVideos||[]).map(mediaURL);
-  const heroPhotos=heroProducts.length?heroProducts:[PHOTO_FALLBACKS.cleanser,PHOTO_FALLBACKS.serum,PHOTO_FALLBACKS.sunscreen];
+  const heroPhotos=[PHOTO_FALLBACKS.cleanser,PHOTO_FALLBACKS.serum,PHOTO_FALLBACKS.sunscreen].map((fallback,index)=>heroProducts[index]||fallback);
+
 
   return `
   <section class="hero">
@@ -874,12 +875,8 @@ function viewHome(){
         </div>
       </div>
       <div class="hero-visual reveal">
-        <div class="hv-inner${heroProducts.length ? '' : ' hv-inner--illustrations'}">
-          ${heroPhotos.map(p => `<div>${productImage(p,{eager:true})}</div>`).join('')}
-        </div>
-        <div class="hero-badge">
-          <b>${esc(CATEGORIES[0].name)}</b>
-          <span>Serums • Sunscreen • Cleansers • Moisturizers</span>
+        <div class="hv-inner hero-links">
+          ${heroPhotos.map(p => `<div class="hero-link-card"><div class="hero-link-photo">${productImage(p,{eager:true})}</div></div>`).join('')}
         </div>
       </div>
     </div>
