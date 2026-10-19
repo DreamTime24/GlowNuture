@@ -131,7 +131,7 @@ test('local manifest is loaded before the application and the existing motion en
   const dom=new JSDOM(fs.readFileSync(path.join(frontend,'index.html'),'utf8'));
   try{
     const scripts=Array.from(dom.window.document.querySelectorAll('script[src]'));
-    const find=name=>scripts.findIndex(script=>script.getAttribute('src').endsWith('/'+name));
+    const find=name=>scripts.findIndex(script=>new URL(script.getAttribute('src'),'https://glownuture.example/').pathname.endsWith('/'+name));
     assert.ok(find('media-paths.js')>=0);assert.ok(find('media-paths.js')<find('local-catalog.js'));assert.ok(find('local-catalog.js')<find('app.js'));assert.ok(find('app.js')<find('glow-motion.js'));
     assert.equal(scripts[find('local-catalog.js')].defer,true);
   }finally{dom.window.close();}
